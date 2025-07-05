@@ -1,7 +1,7 @@
 ---
-import ProjectCard from '@/components/ProjectCard.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import PageHead from '@/components/PageHead.astro'
+import ProjectCard from '@/components/ProjectCard.astro'
 import Layout from '@/layouts/Layout.astro'
 import { getAllProjects } from '@/lib/data-utils'
 
@@ -11,8 +11,10 @@ const projects = await getAllProjects()
 <Layout class="max-w-3xl">
   <PageHead slot="head" title="Projects" />
   <Breadcrumbs items={[{ label: 'Projects', icon: 'lucide:briefcase' }]} />
-      <h2 class="mb-4 text-2xl font-medium">Example Projects Listing</h2>
-      <div class="flex flex-col gap-4">
-        {projects.map((project) => <ProjectCard project={project} />)}
-      </div>
+  <section class="flex flex-col gap-y-4">
+    <div class="font-medium">Some of my recent work</div>
+    <div class="flex flex-col gap-4">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
 </Layout>
