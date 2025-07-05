@@ -62,7 +62,7 @@ export default defineConfig({
         lineNumbers: {
           foreground: 'var(--muted-foreground)',
         },
-        uiFontFamily: 'var(--font-sans)',
+        uiFontFamily: 'var(--font-mono)',
       },
     }),
     mdx(),
