@@ -35,7 +35,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
     label: 'LinkedIn',
   },
   {
-    href: 'mailto:jason@kaezr.dev@gmail.com',
+    href: 'mailto:kaezr.dev@gmail.com',
     label: 'Email',
   },
 ]
