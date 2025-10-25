@@ -1,54 +1,70 @@
 ---
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
-import PageHead from '@/components/PageHead.astro'
 import Link from '@/components/Link.astro'
+import PageHead from '@/components/PageHead.astro'
 import Layout from '@/layouts/Layout.astro'
-import { Work as workExperience } from '@/lib/profiledetail'
+import { getCollection } from 'astro:content'
 
-interface WorkExperience {
-  link: string;
-  position: string;
-  company: string;
-  isCurrent: boolean;
-  start_date: string;
-  end_date: string;
-  responsibilities: string[];
+// Get work collection with error handling
+let workList = []
+try {
+  workList = await getCollection('work')
+} catch (e) {
+  console.error('Error loading work collection:', e)
 }
 
-const workList: WorkExperience[] = workExperience;
+const sortedWork = workList.sort((a, b) => {
+  // Sort current jobs first, then by start date (most recent first)
+  if (a.data.isCurrent && !b.data.isCurrent) return -1
+  if (!a.data.isCurrent && b.data.isCurrent) return 1
+  return b.data.start_date.localeCompare(a.data.start_date)
+})
 ---
 
 <Layout class="max-w-3xl">
   <PageHead slot="head" title="Work Experience" />
   <Breadcrumbs items={[{ label: 'Work', icon: 'lucide:briefcase' }]} />
   <section class="flex flex-col gap-y-6">
-    <div class="font-medium text-lg">My Professional Journey</div>
+    <div class="text-lg font-medium">My Professional Journey</div>
     <div class="flex flex-col gap-6">
-      {workList.map((job: WorkExperience) => (
-        <div class="rounded-lg border p-6 relative">
-          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
-            <div>
-              <h3 class="font-semibold text-lg">
-                <Link href={job.link} external underline>
-                  {job.position}
-                </Link>
-              </h3>
-              <p class="text-muted-foreground">{job.company}</p>
-            </div>
-            <div class="flex flex-col sm:text-right text-sm">
-              <span class="text-muted-foreground">
-                {job.start_date} - {job.end_date}
-              </span>
-            </div>
+      {
+        sortedWork.length === 0 ? (
+          <div class="text-muted-foreground italic">
+            Work experience is currently being updated...
           </div>
+        ) : (
+          sortedWork.map((job) => (
+            <div class="relative rounded-lg border p-6">
+              <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">
+                    <Link href={job.data.link} external underline>
+                      {job.data.position}
+                    </Link>
+                  </h3>
+                  <p class="text-muted-foreground">{job.data.company}</p>
+                </div>
+                <div class="flex flex-col text-sm sm:text-right">
+                  <span class="text-muted-foreground">
+                    {job.data.start_date} - {job.data.end_date}
+                  </span>
+                </div>
+              </div>
 
-          <ul class="list-disc list-inside space-y-2 text-sm text-muted-foreground">
-            {job.responsibilities.map((responsibility: string) => (
-              <li>{responsibility}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
+              <div class="space-y-2">
+                <h4 class="text-muted-foreground text-sm font-medium">
+                  Key Responsibilities:
+                </h4>
+                <ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2 text-sm">
+                  {job.data.responsibilities.map((responsibility) => (
+                    <li>{responsibility}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))
+        )
+      }
     </div>
   </section>
 </Layout>
