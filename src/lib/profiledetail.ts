@@ -8,7 +8,7 @@ import {
   X,
 } from 'lucide-react'
 
-export const profilePicture = ''
+export const profilePicture = '/profile.webp'
 
 export const Name = 'Aarsh Padia'
 
