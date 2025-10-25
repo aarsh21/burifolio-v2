@@ -1,13 +1,3 @@
-import {
-  Github,
-  Mail,
-  FileText,
-  Linkedin,
-  Twitch,
-  Youtube,
-  X,
-} from 'lucide-react'
-
 export const profilePicture = '/profile.webp'
 
 export const Name = 'Aarsh Padia'
@@ -32,36 +22,36 @@ export const Links = [
   {
     name: 'GitHub',
     url: 'https://github.com/aarsh21',
-    icon: Github,
+    icon: 'lucide:github',
   },
   {
     name: 'Email',
     url: 'mailto:aarshpersonal@proton.me',
-    icon: Mail,
+    icon: 'lucide:mail',
   },
   {
     name: 'X',
     url: 'https://x.com/sakamotozsh',
-    icon: X,
+    icon: 'lucide:x',
   },
   {
     name: 'Resume',
     url: 'https://drive.google.com/uc?export=download&id=11OOFNEjwML-2tdqofzNmMlmquTaYNOaY',
-    icon: FileText,
+    icon: 'lucide:file-text',
   },
   {
     name: 'LinkedIn',
     url: 'https://www.linkedin.com/in/aarshpadia21/',
-    icon: Linkedin,
+    icon: 'lucide:linkedin',
   },
   {
     name: 'Twitch',
     url: 'https://www.twitch.tv/sakamotozsh',
-    icon: Twitch,
+    icon: 'lucide:twitch',
   },
   {
     name: 'YouTube',
     url: 'https://www.youtube.com/bukubukufps',
-    icon: Youtube,
+    icon: 'lucide:youtube',
   },
 ]
