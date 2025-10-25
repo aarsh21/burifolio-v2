@@ -15,21 +15,36 @@ interface Project {
 <Layout class="max-w-3xl">
   <PageHead slot="head" title="Projects" />
   <Breadcrumbs items={[{ label: 'Projects', icon: 'lucide:briefcase' }]} />
-  <section class="flex flex-col gap-y-4">
-    <div class="font-medium">Some of my recent work</div>
-    <div class="flex flex-col gap-4">
+  <section class="flex flex-col gap-y-6">
+    <div class="font-medium text-lg">My Projects</div>
+    <div class="flex flex-col gap-6">
       {projectsData.map((project: Project) => (
-        <div class="hover:bg-secondary/50 rounded-xl border p-4 transition-colors duration-300 ease-in-out">
-          <Link href={project.link} class="flex flex-col gap-3" external>
+        <div class="rounded-lg border p-6 relative">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
             <div>
-              <h3 class="mb-2 text-lg font-medium">{project.project}</h3>
-              <div class="text-muted-foreground text-sm space-y-2">
-                {project.details.map((detail) => (
-                  <p>{detail}</p>
-                ))}
-              </div>
+              <h3 class="font-semibold text-lg">
+                <Link href={project.link} external underline>
+                  {project.project}
+                </Link>
+              </h3>
+              <p class="text-muted-foreground text-sm">Project</p>
             </div>
-          </Link>
+            <div class="flex sm:text-right text-sm">
+              <Link
+                href={project.link}
+                class="text-blue-600 dark:text-blue-400 hover:underline"
+                external
+              >
+                View Project →
+              </Link>
+            </div>
+          </div>
+
+          <ul class="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+            {project.details.map((detail) => (
+              <li>{detail}</li>
+            ))}
+          </ul>
         </div>
       ))}
     </div>
