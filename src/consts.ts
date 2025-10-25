@@ -1,10 +1,10 @@
 import type { IconMap, SocialLink, Site } from '@/types'
 
 export const SITE: Site = {
-  title: 'Kaezr',
+  title: 'Aarsh',
   description: 'My corner on the internet',
-  href: 'https://kaezr.xyz',
-  author: 'kaezr',
+  href: 'https://aarsh21.github.io',
+  author: 'aarsh21',
   locale: 'en-US',
   featuredPostCount: 2,
   postsPerPage: 3,
@@ -27,15 +27,15 @@ export const NAV_LINKS: SocialLink[] = [
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    href: 'https://github.com/kaezrr',
+    href: 'https://github.com/aarsh21',
     label: 'GitHub',
   },
   {
-    href: 'https://www.linkedin.com/in/anjishnu-banerjee-683276359',
+    href: 'https://www.linkedin.com/in/aarshpadia21/',
     label: 'LinkedIn',
   },
   {
-    href: 'mailto:kaezr.dev@gmail.com',
+    href: 'mailto:aarshpersonal@proton.me',
     label: 'Email',
   },
 ]
