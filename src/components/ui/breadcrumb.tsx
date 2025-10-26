@@ -3,8 +3,15 @@ import { Slot as SlotPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 import { ChevronRight, MoreHorizontal } from 'lucide-react'
 
-function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
-  return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />
+function Breadcrumb({ className, ...props }: React.ComponentProps<'nav'>) {
+  return (
+    <nav
+      aria-label="breadcrumb"
+      data-slot="breadcrumb"
+      className={cn('hidden md:block', className)}
+      {...props}
+    />
+  )
 }
 
 function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
