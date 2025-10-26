@@ -1,20 +1,22 @@
 ---
 // WorkItem.astro - A component to render individual work experience items
 interface Props {
-  position: string;
-  company: string;
-  link: string;
-  start_date: string;
-  end_date: string;
-  content: string;
+  position: string
+  company: string
+  link: string
+  start_date: string
+  end_date: string
+  content: string
 }
 
-const { position, company, link, start_date, end_date, content } = Astro.props;
-import Link from './Link.astro';
+const { position, company, link, start_date, end_date, content } = Astro.props
+import Link from './Link.astro'
 ---
 
 <div class="relative rounded-lg border p-6">
-  <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+  <div
+    class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between"
+  >
     <div>
       <h3 class="text-lg font-semibold">
         <Link href={link} external underline>
@@ -30,5 +32,8 @@ import Link from './Link.astro';
     </div>
   </div>
 
-  <div set:html={content} class="prose prose-sm text-muted-foreground max-w-none prose-ul:pl-6 prose-ul:space-y-2" />
+  <div
+    set:html={content}
+    class="prose prose-sm text-muted-foreground prose-ul:pl-6 prose-ul:space-y-2 max-w-none"
+  />
 </div>
