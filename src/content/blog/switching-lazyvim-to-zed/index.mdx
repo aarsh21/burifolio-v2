@@ -1,0 +1,221 @@
+---
+title: 'Switching from LazyVim to Zed: A Complete 1-to-1 Migration Guide'
+description: 'Learn how to migrate from LazyVim to Zed with nearly identical keybindings and settings for a seamless transition.'
+date: 2025-01-26
+tags: ['zed', 'lazyvim', 'neovim', 'editor', 'migration', 'productivity']
+draft: false
+---
+
+## Introduction
+
+After months of using LazyVim as my daily driver, I recently made the switch to Zed - the modern, high-performance editor from the creators of Atom. However, I didn't want to lose the muscle memory and efficient workflows I'd built with LazyVim.
+
+In this guide, I'll share my complete configuration that brings LazyVim-like experience to Zed, with nearly identical keybindings and settings.
+
+## Why Switch to Zed?
+
+Before diving into the configuration, let me briefly explain why I made the switch:
+
+- **Performance**: Zed feels incredibly fast and responsive
+- **Modern Architecture**: Built with Rust and modern web technologies
+- **Better Language Support**: Excellent LSP integration out of the box
+- **Native Feel**: Better GUI performance compared to Neovim GUI clients
+- **Active Development**: Rapidly evolving with new features
+
+## The Core Configuration
+
+My setup focuses on two main files: `settings.json` for general editor behavior and `keymap.json` for keybindings.
+
+### Editor Settings
+
+Here's my `settings.json` that replicates the LazyVim experience:
+
+```json
+{
+  "vim_mode": true,
+  "relative_line_numbers": true,
+  "tab_size": 4,
+  "autosave": "on_focus_change",
+  "scrollbar": {
+    "show": "never"
+  },
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware"
+  },
+  "terminal": {
+    "env": {
+      "EDITOR": "zed --wait"
+    },
+    "font_size": 16,
+    "font_family": "JetBrainsMono Nerd Font Mono"
+  },
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "buffer_font_size": 16,
+  "theme": {
+    "mode": "dark",
+    "dark": "Vesper"
+  },
+  "project_panel": {
+    "button": false,
+    "dock": "left",
+    "file_icons": true,
+    "git_status": true
+  }
+}
+```
+
+This configuration provides:
+- Vim mode with relative line numbers (core LazyVim experience)
+- No scrollbars for a cleaner look
+- Indent guides for better code readability
+- Terminal integration with Zed as the default editor
+- Custom font and theme setup
+
+## Keybindings: The Heart of the Migration
+
+The most crucial part of this migration is the keymap configuration. I've recreated almost all essential LazyVim keybindings in Zed:
+
+### Navigation Keybindings
+
+```json
+{
+  "context": "Dock || Terminal || Editor",
+  "bindings": {
+    "ctrl-h": "workspace::ActivatePaneLeft",
+    "ctrl-l": "workspace::ActivatePaneRight",
+    "ctrl-k": "workspace::ActivatePaneUp",
+    "ctrl-j": "workspace::ActivatePaneDown"
+  }
+}
+```
+
+This gives you the same window navigation as `hjkl` in LazyVim.
+
+### File Explorer (Netrw-style)
+
+The project panel keybindings mirror Neovim's netrw:
+
+```json
+{
+  "context": "ProjectPanel && not_editing",
+  "bindings": {
+    "a": "project_panel::NewFile",
+    "A": "project_panel::NewDirectory",
+    "r": "project_panel::Rename",
+    "d": "project_panel::Delete",
+    "c": "project_panel::Copy",
+    "p": "project_panel::Paste",
+    "q": "workspace::ToggleLeftDock",
+    "h": "project_panel::CollapseSelectedEntry",
+    "j": "menu::SelectNext",
+    "k": "menu::SelectPrevious",
+    "l": "project_panel::ExpandSelectedEntry",
+    "o": "project_panel::OpenPermanent"
+  }
+}
+```
+
+### Leader Key Mappings
+
+The heart of LazyVim is the leader key mappings. Here are the essential ones:
+
+#### File Operations
+- `<space>ff` - File finder
+- `<space>fn` - New file
+- `<space>fp` - Open recent project
+
+#### Search
+- `<space>sg` - Search in all files
+- `<space>sw` - Search word under cursor
+- `<space>sb` - Search in current buffer
+
+#### Git Integration
+- `<space>gg` - Open lazygit
+- `<space>gb` - Git blame
+
+#### LSP & Code Actions
+- `<space>ca` - Code actions
+- `<space>cf` - Format code
+- `<space>cr` - Rename symbol
+
+#### UI & Utils
+- `<space>e` - Toggle file explorer
+- `<space>t` - Toggle terminal
+- `<space>ui` - Toggle inlay hints
+- `<space>uw` - Toggle soft wrap
+
+## Advanced Features
+
+### LSP Configuration
+
+My setup includes enhanced LSP settings for Python and other languages:
+
+```json
+{
+  "languages": {
+    "Python": {
+      "language_servers": ["ruff", "basedpyright", "!pyright"],
+      "formatter": [
+        { "code_action": "source.organizeImports.ruff" },
+        { "code_action": "source.fixAll.ruff" },
+        { "language_server": { "name": "ruff" } }
+      ]
+    }
+  }
+}
+```
+
+### AI Assistant Integration
+
+While I prefer keeping AI disabled by default, you can easily toggle it:
+
+```json
+{
+  "disable_ai": true,
+  "agent": {
+    "button": false,
+    "default_profile": "ask",
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
+    }
+  }
+}
+```
+
+Use `<space>aa` to toggle the AI assistant when needed.
+
+## Differences and Adaptations
+
+While this configuration gets you 95% of the LazyVim experience, there are some differences:
+
+1. **Plugin System**: Zed doesn't have the same plugin ecosystem as Neovim
+2. **Lua Configuration**: Zed uses JSON instead of Lua for configuration
+3. **Some Advanced Features**: Certain LazyVim plugins might not have direct equivalents
+
+However, the core editing experience, navigation, and workflows remain nearly identical.
+
+## Installation Steps
+
+1. Install Zed from [zed.dev](https://zed.dev)
+2. Create the configuration files:
+   - `~/.config/zed/settings.json`
+   - `~/.config/zed/keymap.json`
+3. Copy the configurations from this guide
+4. Restart Zed
+5. Install any required language servers (Zed will prompt you)
+
+## Conclusion
+
+This configuration has made my transition from LazyVim to Zed almost seamless. I get the performance benefits of Zed while keeping the efficient workflows I built in LazyVim.
+
+The keybindings feel natural, the performance is excellent, and the overall experience is very polished. If you're considering the switch, I highly recommend giving this setup a try.
+
+You can find my complete configuration files in my [dotfiles repository](https://github.com/aarsh21/dots) for reference.
+
+Happy coding! 🚀
+
+---
+
+*Have questions about the migration? Feel free to reach out on Twitter or GitHub!*
