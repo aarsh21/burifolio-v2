@@ -54,6 +54,10 @@ const combinedReadingTime =
 const tocSections = await getTOCSections(currentPostId)
 ---
 
+
+
+<!-- TODO: fix everything related to typescript -->
+
 <Layout>
   <PostHead slot="head" post={post} />
   {
@@ -152,7 +156,7 @@ const tocSections = await getTOCSections(currentPostId)
           {
             post.data.tags &&
               post.data.tags.length > 0 &&
-              post.data.tags.map((tag) => (
+              post.data.tags.map((tag: any ) => (
                 <a
                   href={`/tags/${tag}`}
                   class={badgeVariants({ variant: 'secondary' })}
