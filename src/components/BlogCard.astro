@@ -10,9 +10,10 @@ import Link from './Link.astro'
 
 interface Props {
   entry: CollectionEntry<'blog'>
+  priority?: boolean
 }
 
-const { entry } = Astro.props
+const { entry, priority = false } = Astro.props
 const formattedDate = formatDate(entry.data.date)
 const readTime = await getCombinedReadingTime(entry.id)
 ---
@@ -33,6 +34,8 @@ const readTime = await getCombinedReadingTime(entry.id)
             width={1200}
             height={630}
             class="object-cover"
+            loading={priority ? 'eager' : 'lazy'}
+            fetchpriority={priority ? 'high' : 'auto'}
           />
         </div>
       )

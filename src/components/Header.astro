@@ -16,6 +16,8 @@ import logo from '../../public/static/picture.webp'
         src={logo}
         alt="Profile"
         class="size-7 rounded-full object-cover sm:size-10"
+        loading="eager"
+        fetchpriority="high"
       />
       <span class="hidden h-full text-lg font-medium min-[300px]:block"
         >{SITE.title}</span
