@@ -35,6 +35,10 @@ export default defineConfig({
 
   cacheDir: './node_modules/.astro',
 
+  image: {
+    remotePatterns: [{ protocol: 'https' }],
+  },
+
   integrations: [
     expressiveCode({
       themes: ['github-light', 'github-dark'],
