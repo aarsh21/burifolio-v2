@@ -29,6 +29,13 @@ export default defineConfig({
     defaultStrategy: 'viewport',
   },
 
+  build: {
+    format: 'directory',
+    inlineStylesheets: 'auto',
+  },
+
+  cacheDir: './node_modules/.astro',
+
   integrations: [
     expressiveCode({
       themes: ['github-light', 'github-dark'],
