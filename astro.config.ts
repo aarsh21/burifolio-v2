@@ -19,10 +19,15 @@ import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
 import tailwindcss from '@tailwindcss/vite'
 
-import node from '@astrojs/node';
+import node from '@astrojs/node'
 
 export default defineConfig({
   site: 'https://aarsh21.github.io',
+
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
 
   integrations: [
     expressiveCode({
