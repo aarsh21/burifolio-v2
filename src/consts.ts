@@ -39,8 +39,12 @@ export const SOCIAL_LINKS: SocialLink[] = [
     label: 'LinkedIn',
   },
   {
-    href: 'mailto:aarshpersonal@proton.me',
-    label: 'Email',
+    href: 'https://cal.com/aarsh.hyorinmaru.me/30min?overlayCalendar=true',
+    label: 'Meeting',
+  },
+  {
+    href: 'https://x.com/aaisuuuui',
+    label: 'X',
   },
 ]
 
@@ -49,6 +53,8 @@ export const ICON_MAP: IconMap = {
   GitHub: 'lucide:github',
   LinkedIn: 'lucide:linkedin',
   Twitter: 'lucide:twitter',
+  X: 'lucide:twitter',
   Email: 'lucide:mail',
+  Meeting: 'lucide:calendar',
   RSS: 'lucide:rss',
 }
