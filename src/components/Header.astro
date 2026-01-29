@@ -5,10 +5,6 @@ import MobileMenu from '@/components/ui/mobile-menu'
 import { NAV_LINKS, SITE } from '@/consts'
 import { Image } from 'astro:assets'
 import logo from '../../public/static/profile.png'
-
-// Check if we're on homepage or about page
-const pathname = Astro.url.pathname
-const hideProfile = pathname === '/' || pathname === '/about' || pathname === '/about/'
 ---
 
 <header transition:persist class="border-foreground bg-background border-b-2">
@@ -16,11 +12,7 @@ const hideProfile = pathname === '/' || pathname === '/about' || pathname === '/
     <!-- Logo/Brand -->
     <Link
       href="/"
-      class:list={[
-        "brutal-hover group border-foreground bg-background hover:bg-foreground hover:text-background flex shrink-0 items-center gap-3 border-2 px-3 py-1.5 transition-colors",
-        { "!hidden": hideProfile }
-      ]}
-      data-header-brand
+      class="brutal-hover group border-foreground bg-background hover:bg-foreground hover:text-background flex shrink-0 items-center gap-3 border-2 px-3 py-1.5 transition-colors"
     >
       <div
         class="border-foreground group-hover:border-background relative h-6 w-6 overflow-hidden border sm:h-8 sm:w-8"
@@ -33,9 +25,6 @@ const hideProfile = pathname === '/' || pathname === '/about' || pathname === '/
         {SITE.title}
       </span>
     </Link>
-
-    <!-- Spacer when brand is hidden -->
-    {hideProfile && <div class="flex-1" />}
 
     <!-- Desktop Navigation -->
     <div class="flex items-center gap-2 sm:gap-3">
@@ -64,18 +53,3 @@ const hideProfile = pathname === '/' || pathname === '/about' || pathname === '/
     </div>
   </div>
 </header>
-
-<script>
-  // Handle client-side navigation to show/hide the brand
-  function updateHeaderBrand() {
-    const pathname = window.location.pathname
-    const hideProfile = pathname === '/' || pathname === '/about' || pathname === '/about/'
-    const brand = document.querySelector('[data-header-brand]')
-    if (brand) {
-      brand.classList.toggle('!hidden', hideProfile)
-    }
-  }
-
-  document.addEventListener('astro:page-load', updateHeaderBrand)
-  document.addEventListener('astro:after-swap', updateHeaderBrand)
-</script>
