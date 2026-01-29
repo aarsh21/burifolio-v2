@@ -2,53 +2,172 @@
 import BlogCard from '@/components/BlogCard.astro'
 import Link from '@/components/Link.astro'
 import PageHead from '@/components/PageHead.astro'
-import { buttonVariants } from '@/components/ui/button'
-import { SITE } from '@/consts'
+
+import { SITE, SOCIAL_LINKS } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getRecentPosts } from '@/lib/data-utils'
+import { Icon } from 'astro-icon/components'
+import { Image } from 'astro:assets'
+import logo from '../../public/static/profile.png'
 
 const blog = await getRecentPosts(SITE.featuredPostCount)
 ---
 
-<Layout class="max-w-3xl">
+<Layout class="max-w-4xl">
   <PageHead slot="head" title="Home" />
-  <section>
-    <div class="rounded-lg border">
-      <div class="flex flex-col space-y-1.5 p-6">
-        <h3 class="text-3xl leading-none font-medium">Hey, I'm Aarsh</h3>
+
+  <!-- Hero Section -->
+  <section class="relative">
+    <!-- Grid background -->
+    <div class="bg-grid pointer-events-none absolute inset-0 opacity-30"></div>
+
+    <div
+      class="border-foreground bg-background shadow-brutal relative border-2 p-6 sm:p-8 md:p-10"
+    >
+      <!-- Corner accents -->
+      <div
+        class="border-accent absolute -top-1 -left-1 h-4 w-4 border-t-4 border-l-4"
+      >
       </div>
-      <div class="p-6 pt-0">
-        <p class="text-muted-foreground text-md mb-2">
-          I'm a 23 y/o CS graduate from Rajkot, Gujarat. I love
-          building things, playing games, and ricing my Arch Linux. This is my
-          little corner of the internet where I showcase projects I'm working on
-          and occasionally share thoughts on tech, life, or whatever's on my
-          mind.
-        </p>
+      <div
+        class="border-accent absolute -top-1 -right-1 h-4 w-4 border-t-4 border-r-4"
+      >
+      </div>
+      <div
+        class="border-accent absolute -bottom-1 -left-1 h-4 w-4 border-b-4 border-l-4"
+      >
+      </div>
+      <div
+        class="border-accent absolute -right-1 -bottom-1 h-4 w-4 border-r-4 border-b-4"
+      >
+      </div>
+
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+        <!-- Profile Image -->
+        <div class="relative shrink-0">
+          <div
+            class="border-foreground shadow-brutal-sm relative h-28 w-28 overflow-hidden border-2 sm:h-36 sm:w-36"
+          >
+            <Image
+              src={logo}
+              alt="Aarsh"
+              class="h-full w-full object-cover grayscale transition-all duration-300 hover:grayscale-0"
+            />
+          </div>
+          <!-- Status indicator -->
+          <div
+            class="border-foreground bg-background absolute -right-2 -bottom-2 flex items-center gap-1 border-2 px-2 py-0.5 text-xs font-bold uppercase"
+          >
+            <span class="bg-additive h-2 w-2 animate-pulse rounded-full"></span>
+            <span>Online</span>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="flex-1">
+          <div
+            class="border-foreground bg-accent text-accent-foreground mb-2 inline-block border-2 px-2 py-0.5 text-xs font-bold uppercase"
+          >
+            Software Developer
+          </div>
+
+          <h1
+            class="glitch mb-3 text-4xl font-bold tracking-tighter uppercase sm:text-5xl md:text-6xl"
+            data-text="Aarsh Padia"
+          >
+            Aarsh Padia
+          </h1>
+
+          <p class="text-muted-foreground mb-4">
+            22 y/o CS graduate from Rajkot, Gujarat. Building things, playing
+            games, and ricing Arch Linux. This is my corner of the internet.
+          </p>
+
+          <!-- Social links -->
+          <div class="flex flex-wrap gap-2">
+            {
+              SOCIAL_LINKS.map((link) => (
+                <Link
+                  href={link.href}
+                  class="brutal-hover border-foreground bg-background hover:bg-accent hover:text-accent-foreground flex items-center gap-1.5 border-2 px-3 py-1.5 text-sm font-medium transition-colors"
+                  external
+                >
+                  <span>{link.label}</span>
+                  <Icon name="lucide:arrow-up-right" class="h-3 w-3" />
+                </Link>
+              ))
+            }
+          </div>
+        </div>
       </div>
     </div>
   </section>
-  <section class="flex flex-col gap-y-4">
-    <h2 class="text-2xl font-medium">Latest posts</h2>
-    <ul class="flex flex-col gap-y-4">
+
+  <!-- Marquee divider -->
+  <div
+    class="border-foreground bg-foreground text-background overflow-hidden border-y-2 py-2"
+  >
+    <div class="animate-marquee flex whitespace-nowrap">
       {
-        blog.map((post) => (
-          <li>
+        Array(10)
+          .fill(null)
+          .map(() => (
+            <span class="mx-4 text-sm font-bold tracking-widest uppercase">
+              Web Dev * Linux * Gaming * Anime * Open Source * TypeScript *
+              React * Arch BTW *
+            </span>
+          ))
+      }
+    </div>
+  </div>
+
+  <!-- Latest Posts Section -->
+  <section class="flex flex-col gap-y-6">
+    <div
+      class="border-foreground flex items-end justify-between border-b-2 pb-2"
+    >
+      <h2 class="text-2xl font-bold tracking-tight uppercase">Latest Posts</h2>
+      <span class="text-muted-foreground text-sm">[{blog.length}]</span>
+    </div>
+
+    <ul class="stagger-children flex flex-col gap-y-4">
+      {
+        blog.map((post, index) => (
+          <li style={`animation-delay: ${index * 100}ms`}>
             <BlogCard entry={post} />
           </li>
         ))
       }
     </ul>
+
     <div class="flex justify-center">
       <Link
         href="/blog"
-        class={buttonVariants({ variant: 'ghost' }) + ' group'}
+        class="brutal-hover group border-foreground bg-background hover:bg-foreground hover:text-background flex items-center gap-2 border-2 px-6 py-3 text-sm font-bold tracking-wide uppercase transition-colors"
       >
-        See all posts <span
-          class="ml-1.5 transition-transform group-hover:translate-x-1"
+        View All Posts
+        <span class="transition-transform group-hover:translate-x-1"
           >&rarr;</span
         >
       </Link>
     </div>
+  </section>
+
+  <!-- Terminal-style footer section -->
+  <section class="border-foreground bg-foreground text-background border-2 p-4">
+    <div class="mb-2 flex items-center gap-2">
+      <div class="bg-destructive h-3 w-3 rounded-full"></div>
+      <div class="bg-accent h-3 w-3 rounded-full"></div>
+      <div class="bg-additive h-3 w-3 rounded-full"></div>
+      <span class="ml-2 text-xs opacity-60">~/aarsh</span>
+    </div>
+    <code class="block text-sm">
+      <span class="text-additive">$</span> cat about.txt<br />
+      <span class="opacity-80">
+        > Developer who loves clean code and messy desktops.<br />
+        > Currently exploring: {new Date().getFullYear()} goals<br />
+        > Status: Always learning
+      </span>
+    </code>
   </section>
 </Layout>

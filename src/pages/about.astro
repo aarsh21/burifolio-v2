@@ -2,31 +2,161 @@
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import PageHead from '@/components/PageHead.astro'
 import Layout from '@/layouts/Layout.astro'
+import { Icon } from 'astro-icon/components'
+import { Image } from 'astro:assets'
+import logo from '../../public/static/profile.png'
 ---
 
-<Layout class="max-w-3xl">
+<Layout class="max-w-4xl">
   <PageHead slot="head" title="About" />
   <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
 
-  <section>
-    <div class="min-w-full">
-      <div class="prose mb-8">
-        <p class="mt-0">
-          Hi, I'm Aarsh Padia, a 21 y/o computer science undergraduate student.
-          I love building things, playing games, and ricing my Arch Linux. I
-          enjoy web development and live on the terminal. If I'm not coding, I'm
-          probably losing my mind in Marvel Rivals/Valorant or watching anime.<br
-          /><br />
-          Beyond coding, I like tinkering with Linux, or "ricing" as people call
-          it these days. I'm a big fan of Arch Linux and enjoy customizing every
-          aspect of my system.<br /><br />
-          I enjoy web development and have worked with various modern technologies
-          and frameworks. I'm always eager to learn new things and take on challenging
-          projects.<br /><br />
-          In my free time, I play a lot of games and enjoy watching anime. I'm also
-          active on various social media platforms where I share my work and experiences.
-        </p>
+  <section class="flex flex-col gap-8">
+    <!-- Header Section -->
+    <div
+      class="border-foreground bg-background shadow-brutal relative border-2 p-6 sm:p-8"
+    >
+      <!-- Corner accents -->
+      <div
+        class="border-accent absolute -top-1 -left-1 h-4 w-4 border-t-4 border-l-4"
+      >
       </div>
+      <div
+        class="border-accent absolute -top-1 -right-1 h-4 w-4 border-t-4 border-r-4"
+      >
+      </div>
+
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+        <!-- Image -->
+        <div
+          class="border-foreground shadow-brutal-sm relative h-32 w-32 shrink-0 overflow-hidden border-2 sm:h-40 sm:w-40"
+        >
+          <Image
+            src={logo}
+            alt="Aarsh Padia"
+            class="h-full w-full object-cover"
+          />
+        </div>
+
+        <!-- Info -->
+        <div class="flex-1">
+          <div
+            class="border-foreground bg-accent text-accent-foreground mb-3 inline-block border-2 px-2 py-0.5 text-xs font-bold uppercase"
+          >
+            About Me
+          </div>
+          <h1
+            class="mb-2 text-3xl font-bold tracking-tight uppercase sm:text-4xl"
+          >
+            Aarsh Padia
+          </h1>
+          <p class="text-muted-foreground">
+            Software Developer / Linux Enthusiast / Gamer
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio Section -->
+    <div class="stagger-children grid gap-6 md:grid-cols-2">
+      <!-- Story -->
+      <div class="border-foreground bg-background border-2 p-5">
+        <div
+          class="border-foreground mb-4 flex items-center gap-2 border-b-2 pb-2"
+        >
+          <Icon name="lucide:user" class="text-accent h-4 w-4" />
+          <h2 class="text-sm font-bold tracking-wide uppercase">The Story</h2>
+        </div>
+        <div class="prose text-sm">
+          <p class="mt-0">
+            Hi, I'm Aarsh Padia, a 22 y/o computer science graduate from Rajkot,
+            Gujarat. I love building things, playing games, and ricing my Arch
+            Linux.
+          </p>
+          <p>
+            I live on the terminal. If I'm not coding, I'm probably losing my
+            mind in Marvel Rivals/Valorant or watching anime.
+          </p>
+        </div>
+      </div>
+
+      <!-- Interests -->
+      <div class="border-foreground bg-background border-2 p-5">
+        <div
+          class="border-foreground mb-4 flex items-center gap-2 border-b-2 pb-2"
+        >
+          <Icon name="lucide:heart" class="text-accent h-4 w-4" />
+          <h2 class="text-sm font-bold tracking-wide uppercase">Interests</h2>
+        </div>
+        <div class="prose text-sm">
+          <p class="mt-0">
+            Beyond coding, I enjoy tinkering with Linux, or "ricing" as people
+            call it these days. I'm a big fan of Arch Linux and enjoy
+            customizing every aspect of my system.
+          </p>
+          <p>
+            I play a lot of games and enjoy watching anime. Always exploring new
+            technologies and frameworks.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills/Tech Section -->
+    <div class="border-foreground bg-background border-2 p-5">
+      <div
+        class="border-foreground mb-4 flex items-center gap-2 border-b-2 pb-2"
+      >
+        <Icon name="lucide:code" class="text-accent h-4 w-4" />
+        <h2 class="text-sm font-bold tracking-wide uppercase">Tech Stack</h2>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        {
+          [
+            'TypeScript',
+            'React',
+            'Svelte',
+            'Tauri',
+            'Python',
+            'Elixir',
+            'Linux',
+            'Docker',
+            'Git',
+            'Neovim',
+            'Arch Linux',
+            'Tailwind CSS',
+          ].map((tech) => (
+            <span class="brutal-hover border-foreground bg-muted border-2 px-3 py-1.5 text-xs font-bold tracking-wide uppercase">
+              {tech}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Current Status -->
+    <div class="border-foreground bg-foreground text-background border-2 p-5">
+      <div class="mb-4 flex items-center gap-2">
+        <div class="bg-destructive h-3 w-3 rounded-full"></div>
+        <div class="bg-accent h-3 w-3 rounded-full"></div>
+        <div class="bg-additive h-3 w-3 rounded-full"></div>
+        <span class="ml-2 text-xs opacity-60">~/aarsh/status</span>
+      </div>
+      <code class="block text-sm">
+        <span class="text-additive">$</span> cat current_status.json<br />
+        <span class="opacity-80">
+          {`{`}<br />
+          &nbsp;&nbsp;"status": "<span class="text-additive"
+            >Full-time at Senpiper</span
+          >",<br />
+          &nbsp;&nbsp;"location": "Rajkot, Gujarat, India",<br />
+          &nbsp;&nbsp;"timezone": "IST (UTC+5:30)",<br />
+          &nbsp;&nbsp;"currently_learning": ["Elixir", "System Design"],<br />
+          &nbsp;&nbsp;"hobbies": ["Gaming", "Anime", "Linux Ricing"]<br />
+          {`}`}
+        </span>
+      </code>
     </div>
   </section>
 </Layout>

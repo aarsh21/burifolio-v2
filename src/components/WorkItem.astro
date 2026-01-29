@@ -11,29 +11,44 @@ interface Props {
 
 const { position, company, link, start_date, end_date, content } = Astro.props
 import Link from './Link.astro'
+import { Icon } from 'astro-icon/components'
 ---
 
-<div class="relative rounded-lg border p-6">
-  <div
-    class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between"
-  >
-    <div>
-      <h3 class="text-lg font-semibold">
-        <Link href={link} external underline>
-          {position}
-        </Link>
-      </h3>
-      <p class="text-muted-foreground">{company}</p>
+<div class="relative group">
+  <!-- Brutalist work card -->
+  <div class="border-2 border-border bg-card shadow-brutal brutal-hover transition-all">
+    <!-- Header with position and dates -->
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 p-6 border-b-2 border-border">
+      <div class="flex-1 min-w-0">
+        <h3 class="text-lg font-bold uppercase tracking-wide">
+          <Link href={link} external class="group/link inline-flex items-center gap-2 hover:text-accent transition-colors">
+            {position}
+            <Icon name="lucide:external-link" class="size-4 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all" />
+          </Link>
+        </h3>
+        <p class="text-muted-foreground font-mono text-sm mt-1">
+          <span class="text-accent">@</span> {company}
+        </p>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <div class="px-3 py-1.5 bg-muted border-2 border-border font-mono text-xs font-bold">
+          {start_date}
+        </div>
+        <span class="text-muted-foreground">—</span>
+        <div class="px-3 py-1.5 bg-accent/10 border-2 border-accent/30 font-mono text-xs font-bold">
+          {end_date}
+        </div>
+      </div>
     </div>
-    <div class="flex flex-col text-sm sm:text-right">
-      <span class="text-muted-foreground">
-        {start_date} - {end_date}
-      </span>
-    </div>
+
+    <!-- Content -->
+    <div
+      set:html={content}
+      class="p-6 prose prose-sm text-muted-foreground prose-ul:pl-0 prose-ul:space-y-2 prose-li:pl-0 max-w-none [&_ul]:list-none [&_li]:relative [&_li]:pl-6 [&_li]:before:content-['—'] [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:text-accent [&_li]:before:font-bold"
+    />
   </div>
 
-  <div
-    set:html={content}
-    class="prose prose-sm text-muted-foreground prose-ul:pl-6 prose-ul:space-y-2 max-w-none"
-  />
+  <!-- Decorative corner accent on hover -->
+  <div class="absolute -top-1 -left-1 h-3 w-3 border-t-2 border-l-2 border-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+  <div class="absolute -bottom-1 -right-1 h-3 w-3 border-b-2 border-r-2 border-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 </div>

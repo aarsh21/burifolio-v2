@@ -4,38 +4,78 @@ import ThemeToggle from '@/components/ThemeToggle.astro'
 import MobileMenu from '@/components/ui/mobile-menu'
 import { NAV_LINKS, SITE } from '@/consts'
 import { Image } from 'astro:assets'
-import logo from '../../public/static/picture-small.webp'
+import logo from '../../public/static/profile.png'
+
+// Check if we're on homepage or about page
+const pathname = Astro.url.pathname
+const hideProfile = pathname === '/' || pathname === '/about' || pathname === '/about/'
 ---
 
-<header transition:persist>
-  <div
-    class="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3"
-  >
-    <Link href="/" class="flex shrink-0 items-center justify-center gap-3">
-      <Image
-        src={logo}
-        alt="Profile"
-        class="size-7 rounded-full object-cover sm:size-10"
-      />
-      <span class="hidden h-full text-lg font-medium min-[300px]:block"
-        >{SITE.title}</span
+<header transition:persist class="border-foreground bg-background border-b-2">
+  <div class="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
+    <!-- Logo/Brand -->
+    <Link
+      href="/"
+      class:list={[
+        "brutal-hover group border-foreground bg-background hover:bg-foreground hover:text-background flex shrink-0 items-center gap-3 border-2 px-3 py-1.5 transition-colors",
+        { "!hidden": hideProfile }
+      ]}
+      data-header-brand
+    >
+      <div
+        class="border-foreground group-hover:border-background relative h-6 w-6 overflow-hidden border sm:h-8 sm:w-8"
       >
+        <Image src={logo} alt="Profile" class="h-full w-full object-cover" />
+      </div>
+      <span
+        class="hidden text-sm font-bold tracking-tight uppercase min-[300px]:block sm:text-base"
+      >
+        {SITE.title}
+      </span>
     </Link>
-    <div class="flex items-center sm:gap-4">
-      <nav class="hidden items-center gap-4 text-sm sm:flex sm:gap-6">
+
+    <!-- Spacer when brand is hidden -->
+    {hideProfile && <div class="flex-1" />}
+
+    <!-- Desktop Navigation -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <nav class="hidden items-center sm:flex">
         {
-          NAV_LINKS.map((item) => (
+          NAV_LINKS.map((item, index) => (
             <Link
               href={item.href}
-              class="text-foreground/60 hover:text-foreground/80 capitalize transition-colors"
+              class="link-underline text-foreground hover:text-accent relative px-3 py-2 text-sm font-medium tracking-tight uppercase transition-colors"
+              data-index={`0${index + 1}`}
             >
+              <span class="text-muted-foreground mr-1 text-xs opacity-60">{`0${index + 1}`}</span>
               {item.label}
             </Link>
           ))
         }
       </nav>
+
+      <!-- Mobile Menu -->
       <MobileMenu client:load transition:persist />
-      <ThemeToggle transition:persist />
+
+      <!-- Theme Toggle -->
+      <div class="border-foreground border-2">
+        <ThemeToggle transition:persist />
+      </div>
     </div>
   </div>
 </header>
+
+<script>
+  // Handle client-side navigation to show/hide the brand
+  function updateHeaderBrand() {
+    const pathname = window.location.pathname
+    const hideProfile = pathname === '/' || pathname === '/about' || pathname === '/about/'
+    const brand = document.querySelector('[data-header-brand]')
+    if (brand) {
+      brand.classList.toggle('!hidden', hideProfile)
+    }
+  }
+
+  document.addEventListener('astro:page-load', updateHeaderBrand)
+  document.addEventListener('astro:after-swap', updateHeaderBrand)
+</script>

@@ -1,12 +1,13 @@
 ---
-position: 'AI Engineer Intern'
+position: 'MLOps & AI Engineer'
 company: 'Senpiper Technologies'
 link: 'https://senpiper.com/'
 isCurrent: true
 start_date: '02-2025'
 end_date: 'Current'
 responsibilities:
-  - 'Trained and fine-tuned computer vision models for image detection tasks, improving model accuracy and performance metrics'
-  - 'Implemented Python-based microservices architecture for local development and testing environments'
-  - 'Conducted experimental analysis of various machine learning models, contributing to improved system understanding and optimization strategies'
+  - 'Building and maintaining MLOps pipelines for training, deployment, and monitoring of machine learning models'
+  - 'Developing and fine-tuning computer vision models for image detection and classification tasks'
+  - 'Implementing Python-based microservices architecture for scalable AI solutions'
+  - 'Conducting experimental analysis and optimization of various machine learning models'
 ---

@@ -39,12 +39,16 @@ export const SOCIAL_LINKS: SocialLink[] = [
     label: 'LinkedIn',
   },
   {
-    href: 'https://cal.com/aarsh.hyorinmaru.me/30min?overlayCalendar=true',
-    label: 'Meeting',
+    href: 'https://x.com/buhhfps',
+    label: 'X',
   },
   {
-    href: 'https://x.com/aaisuuuui',
-    label: 'X',
+    href: 'https://twitch.tv/buhhfps',
+    label: 'Twitch',
+  },
+  {
+    href: 'https://cal.com/aarsh.hyorinmaru.me/30min?overlayCalendar=true',
+    label: 'Meeting',
   },
 ]
 
@@ -54,6 +58,7 @@ export const ICON_MAP: IconMap = {
   LinkedIn: 'lucide:linkedin',
   Twitter: 'lucide:twitter',
   X: 'lucide:twitter',
+  Twitch: 'lucide:twitch',
   Email: 'lucide:mail',
   Meeting: 'lucide:calendar',
   RSS: 'lucide:rss',

@@ -1,4 +1,4 @@
-export const profilePicture = '/profile.webp'
+export const profilePicture = '/profile.png'
 
 export const Name = 'Aarsh Padia'
 

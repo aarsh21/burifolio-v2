@@ -19,14 +19,14 @@ import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
 import tailwindcss from '@tailwindcss/vite'
 
-import node from '@astrojs/node';
+import node from '@astrojs/node'
 
 export default defineConfig({
   site: 'https://aarsh21.github.io',
 
   integrations: [
     expressiveCode({
-      themes: ['github-light', 'github-dark'],
+      themes: ['vitesse-light', 'vitesse-dark'],
       plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
       useDarkModeMediaQuery: false,
       themeCssSelector: (theme) => `[data-theme="${theme.name.split('-')[1]}"]`,
@@ -109,8 +109,8 @@ export default defineConfig({
         rehypePrettyCode,
         {
           theme: {
-            light: 'github-light',
-            dark: 'github-dark',
+            light: 'vitesse-light',
+            dark: 'vitesse-dark',
           },
         },
       ],

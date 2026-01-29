@@ -1,17 +1,54 @@
 ---
-import { SOCIAL_LINKS } from '@/consts'
+import { SITE, SOCIAL_LINKS } from '@/consts'
+import Link from './Link.astro'
 import SocialIcons from './SocialIcons.astro'
 ---
 
-<footer class="py-4">
-  <div
-    class="mx-auto flex max-w-3xl flex-col items-center justify-center gap-y-2 px-4 sm:flex-row sm:justify-between"
-  >
-    <div class="flex flex-wrap items-center justify-center gap-x-2 text-center">
-      <span class="text-muted-foreground text-sm">
-        &copy; {new Date().getFullYear()} Aarsh Padia.
-      </span>
+<footer class="border-t-2 border-foreground bg-background">
+  <div class="mx-auto max-w-4xl px-4">
+    <!-- Main footer content -->
+    <div class="flex flex-col gap-6 py-8 sm:flex-row sm:items-start sm:justify-between">
+      <!-- Brand section -->
+      <div class="flex flex-col gap-3">
+        <div class="text-lg font-bold uppercase tracking-tight">{SITE.title}</div>
+        <p class="max-w-xs text-sm text-muted-foreground">
+          Building things, breaking things, and occasionally fixing them.
+        </p>
+      </div>
+      
+      <!-- Quick links -->
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-bold uppercase tracking-wide text-muted-foreground">Navigation</span>
+        <nav class="flex flex-wrap gap-x-4 gap-y-1">
+          <Link href="/about" class="link-underline text-sm font-medium hover:text-accent">About</Link>
+          <Link href="/work" class="link-underline text-sm font-medium hover:text-accent">Work</Link>
+          <Link href="/projects" class="link-underline text-sm font-medium hover:text-accent">Projects</Link>
+          <Link href="/blog" class="link-underline text-sm font-medium hover:text-accent">Blog</Link>
+        </nav>
+      </div>
+      
+      <!-- Social links -->
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-bold uppercase tracking-wide text-muted-foreground">Connect</span>
+        <SocialIcons links={SOCIAL_LINKS} />
+      </div>
     </div>
-    <SocialIcons links={SOCIAL_LINKS} />
+    
+    <!-- Bottom bar -->
+    <div class="flex flex-col items-center justify-between gap-4 border-t-2 border-foreground py-4 sm:flex-row">
+      <div class="flex items-center gap-2 text-xs text-muted-foreground">
+        <span>&copy; {new Date().getFullYear()}</span>
+        <span class="text-foreground/30">/</span>
+        <span class="font-medium text-foreground">Aarsh Padia</span>
+        <span class="text-foreground/30">/</span>
+        <span>All rights reserved</span>
+      </div>
+      
+      <!-- Status badge -->
+      <div class="flex items-center gap-2 border border-foreground px-3 py-1 text-xs font-medium uppercase">
+        <span class="h-2 w-2 animate-pulse rounded-full bg-additive"></span>
+        <span>Available for work</span>
+      </div>
+    </div>
   </div>
 </footer>

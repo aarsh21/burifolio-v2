@@ -1,39 +1,65 @@
 ---
 import Link from '@/components/Link.astro'
-import { Badge } from '@/components/ui/badge'
+import { Icon } from 'astro-icon/components'
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
   project: CollectionEntry<'projects'>
+  index?: number
 }
 
-const { project } = Astro.props
+const { project, index = 0 } = Astro.props
 ---
 
-<div
-  class="hover:bg-secondary/50 rounded-xl border p-4 transition-colors duration-300 ease-in-out"
->
+<article class="brutal-hover group relative border-2 border-foreground bg-background transition-all">
   <Link
     href={project.data.link}
-    class="flex flex-col gap-4 sm:flex-row"
+    class="block p-4 sm:p-5"
     external
   >
-    <div class="grow">
-      <h3 class="mb-1 text-lg font-medium">
-        {project.data.name}
-      </h3>
-      <p class="text-muted-foreground mb-2 text-sm">
+    <!-- Project number badge -->
+    <div class="absolute -right-px -top-px border-b-2 border-l-2 border-foreground bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">
+      #{String(index + 1).padStart(2, '0')}
+    </div>
+    
+    <div class="flex flex-col gap-3">
+      <!-- Header -->
+      <div class="flex items-start justify-between gap-4 pr-12">
+        <h3 class="text-lg font-bold uppercase tracking-tight transition-colors group-hover:text-accent sm:text-xl">
+          {project.data.name}
+        </h3>
+        <Icon 
+          name="lucide:arrow-up-right" 
+          class="h-5 w-5 shrink-0 text-muted-foreground transition-all group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent" 
+        />
+      </div>
+      
+      <!-- Description -->
+      <p class="text-sm text-muted-foreground">
         {project.data.description}
       </p>
+      
+      <!-- Tags -->
       {
-        project.data.tags && (
-          <div class="flex flex-wrap gap-2">
+        project.data.tags && project.data.tags.length > 0 && (
+          <div class="mt-1 flex flex-wrap gap-2">
             {project.data.tags.map((tag: string) => (
-              <Badge variant="secondary">{tag}</Badge>
+              <span class="inline-block border border-foreground/50 bg-muted/50 px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-foreground/70">
+                {tag}
+              </span>
             ))}
           </div>
         )
       }
+      
+      <!-- Footer indicator -->
+      <div class="mt-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground transition-colors group-hover:text-foreground">
+        <Icon name="lucide:external-link" class="h-3 w-3" />
+        <span>View Project</span>
+      </div>
     </div>
   </Link>
-</div>
+  
+  <!-- Decorative corner -->
+  <div class="absolute -bottom-1 -left-1 h-3 w-3 border-b-2 border-l-2 border-accent"></div>
+</article>

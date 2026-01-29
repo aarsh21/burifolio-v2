@@ -36,23 +36,29 @@ const MobileMenu = () => {
         }}
       >
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
-          className="size-8 sm:hidden"
+          className="size-9 sm:hidden"
           title="Menu"
         >
           <Menu className="size-5" />
           <span className="sr-only">Toggle menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background">
-        {NAV_LINKS.map((item) => (
+      <DropdownMenuContent
+        align="end"
+        className="border-foreground bg-background shadow-brutal border-2"
+      >
+        {NAV_LINKS.map((item, index) => (
           <DropdownMenuItem key={item.href} asChild>
             <a
               href={item.href}
-              className="w-full text-lg font-medium capitalize"
+              className="w-full text-sm font-bold tracking-wide uppercase"
               onClick={() => setIsOpen(false)}
             >
+              <span className="text-muted-foreground mr-2 text-xs opacity-60">
+                {String(index + 1).padStart(2, '0')}
+              </span>
               {item.label}
             </a>
           </DropdownMenuItem>

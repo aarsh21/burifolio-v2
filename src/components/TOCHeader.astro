@@ -13,14 +13,14 @@ const { headings } = Astro.props
 
 {
   headings && headings.length > 0 && (
-    <div id="mobile-toc-container" class="w-full xl:hidden">
+    <div id="mobile-toc-container" class="w-full border-b-2 border-foreground xl:hidden">
       <details class="group">
-        <summary class="flex w-full cursor-pointer items-center justify-between">
-          <div class="mx-auto flex w-full max-w-3xl items-center px-4 py-3">
-            <div class="relative mr-2 size-4">
-              <svg class="h-4 w-4" viewBox="0 0 24 24">
+        <summary class="flex w-full cursor-pointer items-center justify-between bg-muted/50 transition-colors hover:bg-muted">
+          <div class="mx-auto flex w-full max-w-4xl items-center px-4 py-3">
+            <div class="relative mr-3 size-5">
+              <svg class="h-5 w-5" viewBox="0 0 24 24">
                 <circle
-                  class="text-primary/20"
+                  class="text-foreground/20"
                   cx="12"
                   cy="12"
                   r="10"
@@ -30,7 +30,7 @@ const { headings } = Astro.props
                 />
                 <circle
                   id="mobile-toc-progress-circle"
-                  class="text-primary"
+                  class="text-accent"
                   cx="12"
                   cy="12"
                   r="10"
@@ -45,11 +45,11 @@ const { headings } = Astro.props
             </div>
             <span
               id="mobile-toc-current-section"
-              class="text-muted-foreground flex-grow truncate text-sm"
+              class="text-muted-foreground flex-grow truncate text-xs font-bold uppercase tracking-wide"
             >
               Overview
             </span>
-            <span class="text-muted-foreground ml-2">
+            <span class="ml-2 flex size-6 items-center justify-center border border-foreground/30">
               <Icon
                 name="lucide:chevron-down"
                 class="h-4 w-4 transition-transform duration-200 group-open:rotate-180"
@@ -60,25 +60,25 @@ const { headings } = Astro.props
 
         <ScrollArea
           client:load
-          className="mx-auto max-w-3xl"
+          className="mx-auto max-w-4xl border-t border-foreground/20"
           data-toc-header-scroll
         >
-          <div class="max-h-[30vh]">
+          <div class="max-h-[40vh] bg-background">
             <ul
-              class="flex list-none flex-col gap-y-2 px-4 pb-4"
+              class="flex list-none flex-col px-4 py-3"
               id="mobile-table-of-contents"
             >
               {headings.map((heading) => (
                 <li
                   class={cn(
-                    'px-4 text-sm',
+                    'text-xs',
                     getHeadingMargin(heading.depth),
                     'text-foreground/60',
                   )}
                 >
                   <a
                     href={`#${heading.slug}`}
-                    class="mobile-toc-item underline decoration-transparent underline-offset-[3px] transition-colors duration-200 hover:decoration-inherit"
+                    class="mobile-toc-item block py-1.5 transition-colors hover:text-accent"
                     data-heading-id={heading.slug}
                   >
                     {heading.text}
@@ -221,9 +221,11 @@ const { headings } = Astro.props
         const tocItem = item as HTMLElement
         const headingId = tocItem.dataset.headingId
         if (headingId && headingIds.includes(headingId)) {
-          tocItem.classList.add('text-foreground')
+          tocItem.classList.add('text-accent', 'font-bold')
+          tocItem.classList.remove('text-foreground/60')
         } else {
-          tocItem.classList.remove('text-foreground')
+          tocItem.classList.remove('text-accent', 'font-bold')
+          tocItem.classList.add('text-foreground/60')
         }
       })
 

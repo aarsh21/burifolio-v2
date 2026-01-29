@@ -4,6 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import PageHead from '@/components/PageHead.astro'
 import Layout from '@/layouts/Layout.astro'
 import { getAllTags, getPostsByTag } from '@/lib/data-utils'
+import { Icon } from 'astro-icon/components'
 
 export async function getStaticPaths() {
   const tagMap = await getAllTags()
@@ -40,13 +41,71 @@ const { tag, posts } = Astro.props
     ]}
   />
 
-  <ul class="flex flex-col gap-y-4">
-    {
-      posts.map((post) => (
-        <li>
-          <BlogCard entry={post} />
-        </li>
-      ))
-    }
-  </ul>
+  <div class="flex flex-col gap-8">
+    <!-- Header card -->
+    <div class="relative">
+      <!-- Corner accents -->
+      <div
+        class="absolute -top-1 -left-1 h-3 w-3 border-t-2 border-l-2 border-accent"
+      >
+      </div>
+      <div
+        class="absolute -top-1 -right-1 h-3 w-3 border-t-2 border-r-2 border-accent"
+      >
+      </div>
+      <div
+        class="absolute -bottom-1 -left-1 h-3 w-3 border-b-2 border-l-2 border-accent"
+      >
+      </div>
+      <div
+        class="absolute -bottom-1 -right-1 h-3 w-3 border-b-2 border-r-2 border-accent"
+      >
+      </div>
+
+      <div class="border-2 border-border bg-card p-6 shadow-brutal">
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 flex items-center justify-center bg-accent border-2 border-border"
+            >
+              <Icon name="lucide:hash" class="size-5 text-accent-foreground" />
+            </div>
+            <div>
+              <h1 class="text-2xl font-black uppercase tracking-tight">
+                {tag}
+              </h1>
+              <p class="text-muted-foreground font-mono text-sm">
+                <span class="text-accent">&gt;</span> Posts tagged with this topic
+              </p>
+            </div>
+          </div>
+          <div
+            class="px-3 py-1.5 bg-muted border-2 border-border font-mono text-sm font-bold"
+          >
+            {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts list -->
+    <ul class="flex flex-col gap-y-4 stagger-children">
+      {
+        posts.map((post, index) => (
+          <li class="relative" style={`--stagger-delay: ${index * 50}ms`}>
+            <BlogCard entry={post} />
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Footer decoration -->
+    <div
+      class="flex items-center justify-center gap-4 text-muted-foreground/50 font-mono text-xs py-4"
+    >
+      <span class="h-px w-8 bg-border"></span>
+      <span>END_OF_TAG_{tag.toUpperCase()}</span>
+      <span class="h-px w-8 bg-border"></span>
+    </div>
+  </div>
 </Layout>
