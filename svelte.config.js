@@ -1,5 +1,41 @@
 import { mdsvex } from 'mdsvex';
 import adapter from '@sveltejs/adapter-auto';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
+
+const mdsvexConfig = {
+	extensions: ['.svx'],
+	layout: {
+		_: './src/lib/layouts/BlogPostLayout.svelte'
+	},
+	remarkPlugins: [remarkGfm],
+	rehypePlugins: [
+		rehypeSlug,
+		[
+			rehypeAutolinkHeadings,
+			{
+				behavior: 'wrap',
+				properties: { className: ['anchor'] }
+			}
+		],
+		[
+			rehypePrettyCode,
+			{
+				theme: {
+					dark: 'vesper',
+					light: 'vitesse-light'
+				},
+				keepBackground: false,
+				defaultLang: {
+					block: 'text',
+					inline: 'text'
+				}
+			}
+		]
+	]
+};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -13,8 +49,8 @@ const config = {
 		dynamicCompileOptions: ({ filename }) =>
 			filename.includes('node_modules') ? undefined : { runes: true }
 	},
-	preprocess: [mdsvex()],
-	extensions: ['.svelte', '.svx']
+	preprocess: [mdsvex(mdsvexConfig)],
+	extensions: ['.svelte', ...mdsvexConfig.extensions]
 };
 
 export default config;
