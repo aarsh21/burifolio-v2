@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
+	import { siteConfig } from '$lib/data/site';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 
@@ -7,21 +8,18 @@
 </script>
 
 <svelte:head>
-	<title>Aarsh Padia</title>
-	<meta
-		content="Web developer, Linux tinkerer, and AI engineer building thoughtful software and open source tools."
-		name="description"
-	/>
+	<title>{siteConfig.name}</title>
+	<meta content={siteConfig.description} name="description" />
 	<meta content="width=device-width, initial-scale=1" name="viewport" />
-	<meta content="Aarsh Padia" property="og:title" />
-	<meta
-		content="Web developer, Linux tinkerer, and AI engineer building thoughtful software and open source tools."
-		property="og:description"
-	/>
+	<meta content={siteConfig.name} property="og:title" />
+	<meta content={siteConfig.description} property="og:description" />
 	<meta content="website" property="og:type" />
-	<meta content="https://aarsh.hyorinmaru.me/og/home" property="og:image" />
+	<meta content={siteConfig.url} property="og:url" />
+	<meta content={siteConfig.name} property="og:site_name" />
+	<meta content={`${siteConfig.url}/og/home`} property="og:image" />
 	<meta content="summary_large_image" name="twitter:card" />
-	<meta content="Aarsh Padia" name="twitter:title" />
+	<meta content={siteConfig.name} name="twitter:title" />
+	<meta content={siteConfig.description} name="twitter:description" />
 	<meta content="@bukubukutech" name="twitter:creator" />
 	<link href={favicon} rel="icon" />
 </svelte:head>
