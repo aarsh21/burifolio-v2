@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { mdsvex } from 'mdsvex';
 import adapter from '@sveltejs/adapter-auto';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -8,7 +10,7 @@ import remarkGfm from 'remark-gfm';
 const mdsvexConfig = {
 	extensions: ['.svx'],
 	layout: {
-		_: './src/lib/layouts/BlogPostLayout.svelte'
+		_: path.resolve('./src/lib/layouts/BlogPostLayout.svelte')
 	},
 	remarkPlugins: [remarkGfm],
 	rehypePlugins: [
@@ -46,8 +48,17 @@ const config = {
 		adapter: adapter()
 	},
 	vitePlugin: {
-		dynamicCompileOptions: ({ filename }) =>
-			filename.includes('node_modules') ? undefined : { runes: true }
+		dynamicCompileOptions: ({ filename }) => {
+			if (filename.includes('node_modules')) {
+				return undefined;
+			}
+
+			if (filename.endsWith('.svx') || filename.endsWith('BlogPostLayout.svelte')) {
+				return { runes: false };
+			}
+
+			return { runes: true };
+		}
 	},
 	preprocess: [mdsvex(mdsvexConfig)],
 	extensions: ['.svelte', ...mdsvexConfig.extensions]

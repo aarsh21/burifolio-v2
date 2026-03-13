@@ -1,47 +1,42 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-
+	/* eslint-disable svelte/no-immutable-reactive-statements */
 	import { page } from '$app/state';
 
 	import { siteConfig } from '$lib/data/site';
 	import { formatDateLong } from '$lib/utils/date';
 
-	type Props = {
-		title: string;
-		description: string;
-		date: string;
-		draft?: boolean;
-		tags?: string[];
-		children?: Snippet;
-	};
+	export let title: string;
+	export let description: string;
+	export let date: string;
+	export let draft = false;
+	let formattedDate = '';
+	let canonicalUrl = '';
+	let imageUrl = '';
+	let structuredData = '';
+	let jsonLdTag = '';
 
-	let { title, description, date, draft = false, children }: Props = $props();
-
-	let formattedDate = $derived(formatDateLong(date));
-	let canonicalUrl = $derived(`${siteConfig.url}${page.url.pathname}`);
-	let imageUrl = $derived(`${siteConfig.url}/og/blog?title=${encodeURIComponent(title)}`);
-	let structuredData = $derived(
-		JSON.stringify({
-			'@context': 'https://schema.org',
-			'@type': 'BlogPosting',
-			headline: title,
-			datePublished: date,
-			dateModified: date,
-			description,
-			image: imageUrl,
-			url: canonicalUrl,
-			author: {
-				'@type': 'Person',
-				name: siteConfig.name
-			}
-		})
-	);
-	let jsonLdTag = $derived(
+	$: formattedDate = formatDateLong(date);
+	$: canonicalUrl = `${siteConfig.url}${page.url.pathname}`;
+	$: imageUrl = `${siteConfig.url}/og/blog?title=${encodeURIComponent(title)}`;
+	$: structuredData = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		headline: title,
+		datePublished: date,
+		dateModified: date,
+		description,
+		image: imageUrl,
+		url: canonicalUrl,
+		author: {
+			'@type': 'Person',
+			name: siteConfig.name
+		}
+	});
+	$: jsonLdTag =
 		'<script type="application/ld+json">' +
-			structuredData.replace(/</g, '\\u003c') +
-			'<' +
-			'/script>'
-	);
+		structuredData.replace(/</g, '\\u003c') +
+		'<' +
+		'/script>';
 </script>
 
 <svelte:head>
@@ -58,6 +53,7 @@
 	<meta content="summary_large_image" name="twitter:card" />
 	<meta content="@bukubukutech" name="twitter:creator" />
 	<meta content={imageUrl} name="twitter:image" />
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	{@html jsonLdTag}
 </svelte:head>
 
@@ -82,6 +78,6 @@
 	<article
 		class="prose max-w-none prose-invert prose-headings:text-white prose-a:text-white hover:prose-a:underline"
 	>
-		{@render children?.()}
+		<slot />
 	</article>
 </section>

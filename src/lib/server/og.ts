@@ -1,3 +1,6 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import { Resvg } from '@resvg/resvg-js';
 import satori from 'satori';
 
@@ -99,7 +102,9 @@ export async function generateOgImage(
 	width: number,
 	height: number
 ): Promise<Buffer> {
-	const avatarUrl = `${siteConfig.url}${siteConfig.avatar}`;
+	const avatarPath = path.join(process.cwd(), 'static', siteConfig.avatar.replace(/^\//, ''));
+	const avatarBuffer = await fs.readFile(avatarPath);
+	const avatarUrl = `data:image/png;base64,${avatarBuffer.toString('base64')}`;
 	const element = createOgElement(text, avatarUrl);
 	const fontData = await loadGoogleFont('JetBrains+Mono', text);
 

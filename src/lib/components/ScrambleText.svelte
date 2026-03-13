@@ -54,11 +54,11 @@
 		}
 	}
 
-	function startAnimation() {
+	function startAnimation(source: string) {
 		stopAnimation();
 		runId += 1;
 
-		if (!text) {
+		if (!source) {
 			displayText = '';
 			return;
 		}
@@ -67,14 +67,14 @@
 		const localRunId = runId;
 		const interval = Math.max(16, Math.round((40 / speed) * tick));
 
-		displayText = createScrambledFrame(text, frame, localRunId);
+		displayText = createScrambledFrame(source, frame, localRunId);
 
 		timer = setInterval(() => {
 			frame += step;
-			displayText = createScrambledFrame(text, frame, localRunId);
+			displayText = createScrambledFrame(source, frame, localRunId);
 
-			if (frame >= text.length * scramble + scramble) {
-				displayText = text;
+			if (frame >= source.length * scramble + scramble) {
+				displayText = source;
 				stopAnimation();
 			}
 		}, interval);
@@ -82,7 +82,7 @@
 
 	onMount(() => {
 		isMounted = true;
-		startAnimation();
+		startAnimation(text);
 
 		return () => {
 			stopAnimation();
@@ -90,14 +90,14 @@
 	});
 
 	$effect(() => {
-		text;
+		const currentText = text;
 
 		if (!isMounted) {
-			displayText = text;
+			displayText = currentText;
 			return;
 		}
 
-		startAnimation();
+		startAnimation(currentText);
 	});
 </script>
 
