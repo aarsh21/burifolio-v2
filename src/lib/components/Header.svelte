@@ -2,8 +2,6 @@
 	import { Building2, MapPin } from 'lucide-svelte';
 
 	import { homeBlurb, siteConfig } from '$lib/data/site';
-
-	import ScrambleText from './ScrambleText.svelte';
 </script>
 
 <header class="mb-16 space-y-4">
@@ -18,9 +16,7 @@
 
 		<div class="space-y-4">
 			<h1 class="animate-fade-in text-4xl font-bold text-white">
-				<span class="inline-block">
-					<ScrambleText text={siteConfig.name} />
-				</span>
+				<span class="inline-block">{siteConfig.name}</span>
 			</h1>
 
 			<div class="flex flex-col gap-2 text-gray-400">

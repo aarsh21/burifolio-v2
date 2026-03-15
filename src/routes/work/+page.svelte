@@ -1,5 +1,4 @@
 <script lang="ts">
-	import ScrambleText from '$lib/components/ScrambleText.svelte';
 	import SectionList from '$lib/components/SectionList.svelte';
 	import { siteConfig } from '$lib/data/site';
 	import { workItems } from '$lib/data/work';
@@ -17,7 +16,7 @@
 <main class="animate-fade-in-up">
 	<h1 class="mb-8 text-4xl font-bold text-white">
 		<span class="mr-2 text-accent">*</span>
-		<ScrambleText text="work" />
+		work
 	</h1>
 
 	<p class="mb-12 leading-relaxed text-gray-400">

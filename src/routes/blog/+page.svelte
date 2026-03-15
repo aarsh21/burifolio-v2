@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Posts from '$lib/components/Posts.svelte';
-	import ScrambleText from '$lib/components/ScrambleText.svelte';
 	import { siteConfig } from '$lib/data/site';
 
 	import type { PageData } from './$types';
@@ -20,7 +19,7 @@
 <main class="animate-fade-in-up relative">
 	<h1 class="mb-8 text-4xl font-bold text-white">
 		<span class="mr-2 text-accent">*</span>
-		<ScrambleText text="blog" />
+		blog
 	</h1>
 
 	<p class="mb-8 hidden text-sm text-gray-400 sm:block">

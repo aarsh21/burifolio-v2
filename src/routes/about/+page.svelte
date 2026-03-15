@@ -1,5 +1,4 @@
 <script lang="ts">
-	import ScrambleText from '$lib/components/ScrambleText.svelte';
 	import { aboutContent, siteConfig } from '$lib/data/site';
 </script>
 
@@ -30,7 +29,7 @@
 			<div class="space-y-3">
 				<h1 class="text-4xl font-bold text-white">
 					<span class="mr-2 text-accent">*</span>
-					<ScrambleText text="about" />
+					about
 				</h1>
 				<p class="text-xl text-white">{siteConfig.name}</p>
 				<p class="text-gray-400">{siteConfig.currentRole}</p>

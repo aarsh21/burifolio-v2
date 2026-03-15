@@ -9,11 +9,11 @@
 	export let description: string;
 	export let date: string;
 	export let draft = false;
-	let formattedDate = '';
-	let canonicalUrl = '';
-	let imageUrl = '';
-	let structuredData = '';
-	let jsonLdTag = '';
+	let formattedDate: string;
+	let canonicalUrl: string;
+	let imageUrl: string;
+	let structuredData: string;
+	let jsonLdTag: string;
 
 	$: formattedDate = formatDateLong(date);
 	$: canonicalUrl = `${siteConfig.url}${page.url.pathname}`;
