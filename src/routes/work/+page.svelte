@@ -13,7 +13,7 @@
 	<meta content={`${siteConfig.url}/og/home?title=work`} property="og:image" />
 </svelte:head>
 
-<main class="animate-fade-in-up">
+<main>
 	<h1 class="mb-8 text-4xl font-bold text-white">
 		<span class="mr-2 text-accent">*</span>
 		work

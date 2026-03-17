@@ -2,7 +2,7 @@
 	import { socialLinks } from '$lib/data/site';
 </script>
 
-<section class="animate-fade-in-up">
+<section>
 	<h2 class="mb-6 flex items-center text-2xl font-bold text-white">
 		<span class="mr-2 text-accent">*</span> links
 	</h2>

@@ -15,9 +15,7 @@
 		</div>
 
 		<div class="space-y-4">
-			<h1 class="animate-fade-in text-4xl font-bold text-white">
-				<span class="inline-block">{siteConfig.name}</span>
-			</h1>
+			<h1 class="text-4xl font-bold text-white">{siteConfig.name}</h1>
 
 			<div class="flex flex-col gap-2 text-gray-400">
 				<div class="flex items-center gap-2">
@@ -33,7 +31,7 @@
 		</div>
 	</div>
 
-	<p class="animate-fade-in-up leading-relaxed">
+	<p class="leading-relaxed">
 		{homeBlurb}
 	</p>
 

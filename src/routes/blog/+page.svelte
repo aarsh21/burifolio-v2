@@ -16,7 +16,7 @@
 	<meta content={`${siteConfig.url}/og/home?title=blog`} property="og:image" />
 </svelte:head>
 
-<main class="animate-fade-in-up relative">
+<main class="relative">
 	<h1 class="mb-8 text-4xl font-bold text-white">
 		<span class="mr-2 text-accent">*</span>
 		blog

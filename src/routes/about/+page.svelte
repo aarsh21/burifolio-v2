@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { NumberTicker } from '$lib/components/magic/number-ticker';
+	import { ShineBorder } from '$lib/components/magic/shine-border';
 	import { aboutContent, siteConfig } from '$lib/data/site';
 </script>
 
@@ -11,8 +13,9 @@
 	<meta content={`${siteConfig.url}/og/home?title=about`} property="og:image" />
 </svelte:head>
 
-<main class="animate-fade-in-up space-y-8">
-	<header class="border border-gray-800 p-6 sm:p-8">
+<main class="space-y-8">
+	<header class="relative overflow-hidden rounded-sm border border-gray-800 p-6 sm:p-8">
+		<ShineBorder borderWidth={1} duration={14} shineColor={['#8259c8', '#6b3fa0']} />
 		<div class="flex flex-col gap-6 sm:flex-row sm:items-center">
 			<div
 				class="relative h-28 w-28 overflow-hidden rounded-full border border-gray-800 bg-gray-900"
@@ -59,7 +62,12 @@
 	</div>
 
 	<section class="border border-gray-800 p-6">
-		<h2 class="mb-4 text-lg font-semibold text-white">tech stack</h2>
+		<h2 class="mb-4 text-lg font-semibold text-white">
+			tech stack
+			<span class="ml-2 text-sm font-normal text-gray-400">
+				<NumberTicker value={aboutContent.stack.length} delay={0.5} class="font-bold text-accent" /> technologies
+			</span>
+		</h2>
 		<div class="flex flex-wrap gap-2">
 			{#each aboutContent.stack as tech (tech)}
 				<span class="rounded bg-gray-800/50 px-2 py-1 text-sm text-gray-300">{tech}</span>

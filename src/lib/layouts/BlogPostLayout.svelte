@@ -57,7 +57,7 @@
 	{@html jsonLdTag}
 </svelte:head>
 
-<section class="animate-fade-in-up">
+<section>
 	{#if draft}
 		<div
 			class="mb-6 rounded-lg border border-yellow-500/20 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-500"

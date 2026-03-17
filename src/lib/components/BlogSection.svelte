@@ -17,7 +17,7 @@
 	);
 </script>
 
-<section class="animate-fade-in-up mb-16">
+<section class="mb-16">
 	<h2 class="mb-6 flex items-center text-2xl font-bold text-white">
 		<span class="mr-2 text-accent">*</span>
 		blog
