@@ -16,18 +16,24 @@ export const siteConfig = {
 	avatar: '/profile.png',
 	github: 'https://github.com/aarsh21',
 	linkedin: 'https://www.linkedin.com/in/aarshpadia21/',
-	x: 'https://x.com/bukubukutech',
+	x: 'https://x.com/buhhfps',
+	twitch: 'https://twitch.tv/buhhfps',
+	youtube: 'https://www.youtube.com/bukubukufps',
+	meeting: 'https://cal.com/aarsh.hyorinmaru.me/30min?overlayCalendar=true',
 	resume: 'https://drive.google.com/uc?export=download&id=11OOFNEjwML-2tdqofzNmMlmquTaYNOaY'
 } as const;
 
 export const homeBlurb =
-	'CS graduate from Rajkot building across the web, Linux, and applied AI. I spend most of my time shipping tools, refining workflows, and making software feel a little more intentional.';
+	'22 y/o CS graduate from Rajkot, Gujarat. Building things, playing games, and ricing Arch Linux. This is my corner of the internet.';
 
 export const socialLinks: SocialLink[] = [
 	{ title: 'email', href: `mailto:${siteConfig.email}` },
 	{ title: 'github', href: siteConfig.github },
 	{ title: 'linkedin', href: siteConfig.linkedin },
 	{ title: 'x', href: siteConfig.x },
+	{ title: 'meeting', href: siteConfig.meeting },
+	{ title: 'twitch', href: siteConfig.twitch },
+	{ title: 'youtube', href: siteConfig.youtube },
 	{ title: 'resume', href: siteConfig.resume }
 ];
 
