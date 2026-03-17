@@ -24,3 +24,6 @@ burifoliov-v3-next/
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# btca local data
+.btca/
