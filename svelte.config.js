@@ -3,14 +3,48 @@ import path from 'node:path';
 import { mdsvex } from 'mdsvex';
 import adapter from '@sveltejs/adapter-auto';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+import { createHighlighter } from 'shiki';
+
+const highlighter = await createHighlighter({
+	themes: ['material-theme'],
+	langs: [
+		'json',
+		'javascript',
+		'typescript',
+		'bash',
+		'shell',
+		'text',
+		'svelte',
+		'html',
+		'css',
+		'python',
+		'rust',
+		'go',
+		'lua',
+		'yaml',
+		'toml',
+		'markdown',
+		'diff'
+	]
+});
 
 const mdsvexConfig = {
 	extensions: ['.svx'],
 	layout: {
 		_: path.resolve('./src/lib/layouts/BlogPostLayout.svelte')
+	},
+	highlight: {
+		highlighter: (code, lang) => {
+			const html = highlighter.codeToHtml(code, {
+				lang: lang || 'text',
+				theme: 'material-theme'
+			});
+			// Escape Svelte special chars so they render as literal text
+			const escaped = html.replace(/\{/g, '&#123;').replace(/\}/g, '&#125;').replace(/`/g, '&#96;');
+			return `{@html \`${escaped}\`}`;
+		}
 	},
 	remarkPlugins: [remarkGfm],
 	rehypePlugins: [
@@ -21,20 +55,6 @@ const mdsvexConfig = {
 				behavior: 'wrap',
 				properties: { className: ['anchor'] }
 			}
-		],
-		[
-			rehypePrettyCode,
-			{
-				theme: {
-					dark: 'vesper',
-					light: 'vitesse-light'
-				},
-				keepBackground: false,
-				defaultLang: {
-					block: 'text',
-					inline: 'text'
-				}
-			}
 		]
 	]
 };
@@ -42,9 +62,6 @@ const mdsvexConfig = {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
-		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter()
 	},
 	vitePlugin: {
