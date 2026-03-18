@@ -23,6 +23,7 @@
 	<meta content={siteConfig.description} name="twitter:description" />
 	<meta content="@bukubukutech" name="twitter:creator" />
 	<link href={favicon} rel="icon" />
+	<script defer src="https://analytics.hyorinmaru.me/script.js" data-website-id="be1b6d6e-0876-42d9-8751-a8d0055d2992"></script>
 </svelte:head>
 
 <div class="relative mx-auto min-h-screen max-w-4xl px-4 py-8 pb-24 font-mono antialiased sm:pb-12">
