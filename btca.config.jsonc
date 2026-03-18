@@ -10,7 +10,6 @@
 			"searchPath": "src/routes/magic/docs"
 		}
 	],
-	"model": "claude-haiku-4-5",
-	"provider": "opencode"
+	"model": "gemini-3-flash-preview",
+	"provider": "github-copilot"
 }
-
