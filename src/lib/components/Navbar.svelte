@@ -183,7 +183,7 @@
 {/if}
 
 <!-- Desktop statusline (fixed bottom) -->
-<div class="fixed bottom-0 left-0 right-0 z-40 hidden sm:block">
+<div class="fixed right-0 bottom-0 left-0 z-40 hidden sm:block">
 	<div class="mx-auto max-w-4xl px-4">
 		<div
 			class="flex items-center justify-between border-t border-border bg-background/95 py-1.5 text-xs backdrop-blur-sm"
@@ -273,7 +273,7 @@
 					</span>
 				</button>
 
-				<span class="tabular-nums text-accent">{scrollPercent}%</span>
+				<span class="text-accent tabular-nums">{scrollPercent}%</span>
 			</div>
 		</div>
 	</div>
@@ -282,7 +282,7 @@
 <!-- First-visit hint -->
 {#if showHint}
 	<div
-		class="fixed bottom-10 left-1/2 z-50 hidden -translate-x-1/2 animate-fade-in sm:block"
+		class="animate-fade-in fixed bottom-10 left-1/2 z-50 hidden -translate-x-1/2 sm:block"
 		role="status"
 	>
 		<button
@@ -292,8 +292,8 @@
 			}}
 			class="rounded-lg border border-border/50 bg-card/95 px-4 py-2.5 text-xs text-muted-foreground shadow-lg backdrop-blur-sm transition-opacity hover:opacity-80"
 		>
-			press <kbd class="rounded border border-border px-1.5 py-0.5 text-accent">?</kbd> for navigation
-			· <kbd class="rounded border border-border px-1.5 py-0.5 text-accent">j</kbd><kbd
+			press <kbd class="rounded border border-border px-1.5 py-0.5 text-accent">?</kbd> for
+			navigation · <kbd class="rounded border border-border px-1.5 py-0.5 text-accent">j</kbd><kbd
 				class="rounded border border-border px-1.5 py-0.5 text-accent">k</kbd
 			> to scroll
 		</button>
