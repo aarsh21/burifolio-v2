@@ -1,15 +1,53 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 	import { Briefcase, FolderOpen, Home, Notebook, User } from 'lucide-svelte';
+	import { slide } from 'svelte/transition';
+	import { playKeySound } from '$lib/utils/sound';
 
 	const navItems = [
-		{ href: '/', label: 'Home', key: 'h', icon: Home },
-		{ href: '/about', label: 'About', key: 'a', icon: User },
-		{ href: '/blog', label: 'Blog', key: 'b', icon: Notebook },
-		{ href: '/work', label: 'Work', key: 'w', icon: Briefcase },
-		{ href: '/projects', label: 'Projects', key: 'p', icon: FolderOpen }
+		{ href: '/', label: 'home', icon: Home },
+		{ href: '/about', label: 'about', icon: User },
+		{ href: '/blog', label: 'blog', icon: Notebook },
+		{ href: '/work', label: 'work', icon: Briefcase },
+		{ href: '/projects', label: 'projects', icon: FolderOpen }
 	];
+
+	function activeIndex() {
+		return navItems.findIndex((item) => isActive(item.href));
+	}
+
+	let scrollPercent = $state(0);
+	let lastGPress = $state(0);
+	let pressedKey = $state('');
+	let pressedTimeout: ReturnType<typeof setTimeout>;
+	let showNav = $state(browser ? localStorage.getItem('showNav') === 'true' : false);
+	let showHint = $state(false);
+
+	$effect(() => {
+		if (!browser) return;
+		if (localStorage.getItem('hintDismissed')) return;
+		showHint = true;
+		const t = setTimeout(() => {
+			showHint = false;
+			localStorage.setItem('hintDismissed', 'true');
+		}, 6000);
+		return () => clearTimeout(t);
+	});
+
+	function flash(key: string) {
+		pressedKey = key;
+		clearTimeout(pressedTimeout);
+		pressedTimeout = setTimeout(() => {
+			pressedKey = '';
+		}, 200);
+	}
+
+	function toggleNav() {
+		showNav = !showNav;
+		if (browser) localStorage.setItem('showNav', String(showNav));
+	}
 
 	function isActive(href: string) {
 		if (href === '/') return page.url.pathname === '/';
@@ -18,44 +56,249 @@
 
 	function shouldIgnoreShortcut(event: KeyboardEvent) {
 		const target = event.target;
-
-		if (
+		return (
 			target instanceof HTMLInputElement ||
 			target instanceof HTMLTextAreaElement ||
 			(target instanceof HTMLElement && target.isContentEditable)
-		) {
-			return true;
-		}
+		);
+	}
 
-		return event.metaKey || event.ctrlKey || event.altKey;
+	function updateScrollPercent() {
+		const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		scrollPercent = docHeight > 0 ? Math.round((window.scrollY / docHeight) * 100) : 0;
 	}
 
 	async function handleKeydown(event: KeyboardEvent) {
-		if (shouldIgnoreShortcut(event)) {
+		if (shouldIgnoreShortcut(event)) return;
+
+		// ? toggles navbar
+		if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+			event.preventDefault();
+			playKeySound('?');
+			toggleNav();
 			return;
 		}
 
-		const item = navItems.find((n) => n.key === event.key.toLowerCase());
-		if (item) {
-			await goto(item.href);
+		// Vim scroll controls (no meta/alt)
+		if (!event.metaKey && !event.altKey && !event.ctrlKey) {
+			if (event.key === 'j') {
+				event.preventDefault();
+				playKeySound('j');
+				flash('j');
+				window.scrollBy({ top: 80, behavior: 'smooth' });
+				return;
+			}
+			if (event.key === 'k') {
+				event.preventDefault();
+				playKeySound('k');
+				flash('k');
+				window.scrollBy({ top: -80, behavior: 'smooth' });
+				return;
+			}
+			if (event.key === 'G') {
+				event.preventDefault();
+				playKeySound('G');
+				flash('G');
+				window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+				return;
+			}
+			if (event.key === 'g') {
+				const now = Date.now();
+				if (now - lastGPress < 500) {
+					event.preventDefault();
+					playKeySound('g');
+					flash('gg');
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+					lastGPress = 0;
+					return;
+				}
+				lastGPress = now;
+				return;
+			}
+		}
+
+		// Ctrl+d / Ctrl+u — half-page scroll
+		if (event.ctrlKey && !event.metaKey && !event.altKey) {
+			if (event.key === 'd') {
+				event.preventDefault();
+				playKeySound('d');
+				flash('C-d');
+				window.scrollBy({ top: window.innerHeight / 2, behavior: 'smooth' });
+				return;
+			}
+			if (event.key === 'u') {
+				event.preventDefault();
+				playKeySound('u');
+				flash('C-u');
+				window.scrollBy({ top: -window.innerHeight / 2, behavior: 'smooth' });
+				return;
+			}
+		}
+
+		// h/l — cycle tabs left/right (no modifiers)
+		if (!event.metaKey && !event.ctrlKey && !event.altKey) {
+			if (event.key === 'h') {
+				event.preventDefault();
+				playKeySound('h');
+				flash('h');
+				const idx = activeIndex();
+				const prev = idx > 0 ? idx - 1 : navItems.length - 1;
+				await goto(navItems[prev].href);
+				return;
+			}
+			if (event.key === 'l') {
+				event.preventDefault();
+				playKeySound('l');
+				flash('l');
+				const idx = activeIndex();
+				const next = idx < navItems.length - 1 ? idx + 1 : 0;
+				await goto(navItems[next].href);
+				return;
+			}
 		}
 	}
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} onscroll={updateScrollPercent} />
 
-<!-- Desktop nav -->
-<nav class="mb-12 hidden items-center justify-between text-sm sm:flex">
-	<div class="flex space-x-4">
-		{#each navItems as item (item.href)}
-			<a
-				class="transition-colors duration-200 hover:text-accent"
-				class:text-accent={isActive(item.href)}
-				href={item.href}>[{item.key}] {item.label.toLowerCase()}</a
-			>
-		{/each}
+<!-- Desktop top navbar (togglable) -->
+{#if showNav}
+	<nav class="mb-10 hidden sm:block" transition:slide={{ duration: 200 }}>
+		<div class="flex items-center justify-center gap-8 py-3 text-sm">
+			{#each navItems as item (item.href)}
+				{@const active = isActive(item.href)}
+				<a
+					href={item.href}
+					class="flex items-center gap-2 transition-colors duration-150 {active
+						? 'text-accent'
+						: 'text-muted-foreground/40 hover:text-muted-foreground'}"
+				>
+					<item.icon class="h-3.5 w-3.5" />
+					{item.label}
+				</a>
+			{/each}
+		</div>
+		<div class="h-px bg-border/40"></div>
+	</nav>
+{/if}
+
+<!-- Desktop statusline (fixed bottom) -->
+<div class="fixed bottom-0 left-0 right-0 z-40 hidden sm:block">
+	<div class="mx-auto max-w-4xl px-4">
+		<div
+			class="flex items-center justify-between border-t border-border bg-background/95 py-1.5 text-xs backdrop-blur-sm"
+		>
+			<!-- Left: nav tabs -->
+			<div class="flex items-center gap-3">
+				<span class="flex items-center">
+					{#each navItems as item, i (item.href)}
+						{@const active = isActive(item.href)}
+						{#if i > 0}
+							<span class="px-1 text-muted-foreground/20">|</span>
+						{/if}
+						<a
+							href={item.href}
+							class="px-1.5 py-0.5 transition-colors duration-100 {active
+								? 'text-accent'
+								: 'text-muted-foreground/50 hover:text-muted-foreground'}"
+						>
+							{item.label}
+						</a>
+					{/each}
+				</span>
+			</div>
+
+			<!-- Right: key hints + nav toggle + scroll % -->
+			<div class="flex items-center gap-4 text-muted-foreground/40">
+				<span class="flex items-center gap-0.5">
+					<span class="transition-colors duration-100 {pressedKey === 'h' ? 'text-accent' : ''}"
+						>h</span
+					>
+					<span>/</span>
+					<span class="transition-colors duration-100 {pressedKey === 'l' ? 'text-accent' : ''}"
+						>l</span
+					>
+				</span>
+				<span class="flex items-center gap-0.5">
+					<span class="transition-colors duration-100 {pressedKey === 'j' ? 'text-accent' : ''}"
+						>j</span
+					>
+					<span>/</span>
+					<span class="transition-colors duration-100 {pressedKey === 'k' ? 'text-accent' : ''}"
+						>k</span
+					>
+				</span>
+				<span class="flex items-center gap-0.5">
+					<span class="transition-colors duration-100 {pressedKey === 'gg' ? 'text-accent' : ''}"
+						>gg</span
+					>
+					<span>/</span>
+					<span class="transition-colors duration-100 {pressedKey === 'G' ? 'text-accent' : ''}"
+						>G</span
+					>
+				</span>
+				<span class="flex items-center gap-0.5">
+					<span class="transition-colors duration-100 {pressedKey === 'C-d' ? 'text-accent' : ''}"
+						>^d</span
+					>
+					<span>/</span>
+					<span class="transition-colors duration-100 {pressedKey === 'C-u' ? 'text-accent' : ''}"
+						>^u</span
+					>
+				</span>
+
+				<!-- Nav toggle -->
+				<button
+					onclick={toggleNav}
+					class="group flex items-center gap-1.5"
+					title={showNav ? 'Hide navbar (?)' : 'Show navbar (?)'}
+				>
+					<span
+						class="relative inline-flex h-3 w-6 items-center rounded-full transition-colors {showNav
+							? 'bg-accent/30'
+							: 'bg-muted-foreground/15'}"
+					>
+						<span
+							class="inline-block h-2 w-2 rounded-full transition-all duration-200 {showNav
+								? 'translate-x-3 bg-accent'
+								: 'translate-x-0.5 bg-muted-foreground/40'}"
+						></span>
+					</span>
+					<span
+						class="transition-colors duration-150 {showNav
+							? 'text-accent'
+							: 'text-muted-foreground/30 group-hover:text-muted-foreground/50'}"
+					>
+						nav
+					</span>
+				</button>
+
+				<span class="tabular-nums text-accent">{scrollPercent}%</span>
+			</div>
+		</div>
 	</div>
-</nav>
+</div>
+
+<!-- First-visit hint -->
+{#if showHint}
+	<div
+		class="fixed bottom-10 left-1/2 z-50 hidden -translate-x-1/2 animate-fade-in sm:block"
+		role="status"
+	>
+		<button
+			onclick={() => {
+				showHint = false;
+				if (browser) localStorage.setItem('hintDismissed', 'true');
+			}}
+			class="rounded-lg border border-border/50 bg-card/95 px-4 py-2.5 text-xs text-muted-foreground shadow-lg backdrop-blur-sm transition-opacity hover:opacity-80"
+		>
+			press <kbd class="rounded border border-border px-1.5 py-0.5 text-accent">?</kbd> for navigation
+			· <kbd class="rounded border border-border px-1.5 py-0.5 text-accent">j</kbd><kbd
+				class="rounded border border-border px-1.5 py-0.5 text-accent">k</kbd
+			> to scroll
+		</button>
+	</div>
+{/if}
 
 <!-- Mobile bottom dock -->
 <nav

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
 	import { DotPattern } from '$lib/components/magic/dot-pattern';
-	import { ScrollProgress } from '$lib/components/magic/scroll-progress';
 	import { siteConfig } from '$lib/data/site';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
@@ -26,11 +25,9 @@
 	<link href={favicon} rel="icon" />
 </svelte:head>
 
-<ScrollProgress class="h-[2px] bg-accent" />
-
-<div class="relative mx-auto min-h-screen max-w-4xl px-4 py-8 pb-24 font-mono antialiased sm:pb-8">
+<div class="relative mx-auto min-h-screen max-w-4xl px-4 py-8 pb-24 font-mono antialiased sm:pb-12">
 	<DotPattern
-		class="fixed inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)] opacity-[0.15]"
+		class="fixed inset-0 -z-10 opacity-[0.15] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]"
 		width={24}
 		height={24}
 		cr={1}
