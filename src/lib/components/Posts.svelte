@@ -99,7 +99,7 @@
 
 {#if isSearching}
 	<div
-		class="fixed right-4 bottom-4 left-4 mx-auto max-w-2xl border border-gray-800 bg-black/50 p-2 backdrop-blur-sm"
+		class="fixed right-4 bottom-4 left-4 z-50 mx-auto max-w-2xl border border-gray-800 bg-black/50 p-2 backdrop-blur-sm sm:bottom-10"
 	>
 		<div class="flex items-center text-gray-400">
 			<span class="mr-2 text-accent">/</span>
