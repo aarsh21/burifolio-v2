@@ -3,7 +3,6 @@
 	import { DotPattern } from '$lib/components/magic/dot-pattern';
 	import { siteConfig } from '$lib/data/site';
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 
 	let { children } = $props();
 </script>
@@ -22,7 +21,8 @@
 	<meta content={siteConfig.name} name="twitter:title" />
 	<meta content={siteConfig.description} name="twitter:description" />
 	<meta content="@bukubukutech" name="twitter:creator" />
-	<link href={favicon} rel="icon" />
+	<link href="/profile.png" rel="icon" type="image/png" />
+	<link href="/profile.png" rel="apple-touch-icon" />
 	<script
 		defer
 		src="https://analytics.hyorinmaru.me/script.js"
