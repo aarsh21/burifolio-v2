@@ -1,0 +1,15 @@
+{
+	"$schema": "https://btca.dev/btca.schema.json",
+	"dataDirectory": ".btca",
+	"resources": [
+		{
+			"type": "git",
+			"name": "svelte-animation-lib",
+			"url": "https://github.com/SikandarJODD/animations",
+			"branch": "master",
+			"searchPath": "src/routes/magic/docs"
+		}
+	],
+	"model": "gemini-3-flash-preview",
+	"provider": "github-copilot"
+}
