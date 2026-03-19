@@ -2,7 +2,7 @@ import soundUrl from '../../cherrymx-black-abs/sound.ogg';
 
 let ctx: AudioContext | null = null;
 let audioBuffer: AudioBuffer | null = null;
-let loading = false;
+let loadPromise: Promise<AudioBuffer> | null = null;
 
 // PC keyboard scan codes → [start_ms, duration_ms] from the CherryMX Black ABS pack
 // Mapped to the actual keys used on the site
@@ -24,6 +24,7 @@ const keyMap: Record<string, [number, number]> = {
 	u: [25313, 189], // scan 22
 
 	// Toggle nav
+	'/': [43105, 190], // scan 53
 	'?': [43105, 190] // scan 53 (/ key)
 };
 
@@ -34,34 +35,43 @@ function getCtx() {
 }
 
 async function loadAudio() {
-	if (loading || audioBuffer) return;
-	loading = true;
-	const ac = getCtx();
-	const res = await fetch(soundUrl);
-	const buf = await res.arrayBuffer();
-	audioBuffer = await ac.decodeAudioData(buf);
-	loading = false;
+	if (audioBuffer) return audioBuffer;
+
+	if (!loadPromise) {
+		loadPromise = (async () => {
+			const ac = getCtx();
+			const res = await fetch(soundUrl);
+			const buf = await res.arrayBuffer();
+			const decoded = await ac.decodeAudioData(buf);
+			audioBuffer = decoded;
+			return decoded;
+		})();
+
+		loadPromise.catch(() => {
+			loadPromise = null;
+		});
+	}
+
+	return loadPromise;
 }
 
 export function playKeySound(key: string) {
-	const ac = getCtx();
-
-	if (!audioBuffer) {
-		loadAudio();
-		return;
-	}
-
 	const slice = keyMap[key];
 	if (!slice) return;
 
 	const [startMs, durationMs] = slice;
 
-	const source = ac.createBufferSource();
-	source.buffer = audioBuffer;
+	void loadAudio()
+		.then((buffer) => {
+			const ac = getCtx();
+			const source = ac.createBufferSource();
+			source.buffer = buffer;
 
-	const gain = ac.createGain();
-	gain.gain.value = 0.6;
+			const gain = ac.createGain();
+			gain.gain.value = 0.6;
 
-	source.connect(gain).connect(ac.destination);
-	source.start(0, startMs / 1000, durationMs / 1000);
+			source.connect(gain).connect(ac.destination);
+			source.start(0, startMs / 1000, durationMs / 1000);
+		})
+		.catch(() => {});
 }
