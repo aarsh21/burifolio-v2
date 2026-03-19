@@ -20,6 +20,7 @@ const keyMap: Record<string, [number, number]> = {
 	G: [33453, 188], // scan 34 (same physical key)
 
 	// Half-page (Ctrl+d / Ctrl+u — use the letter key sound)
+	ctrl: [45327, 165], // scan 29
 	d: [32492, 169], // scan 32
 	u: [25313, 189], // scan 22
 
@@ -55,7 +56,7 @@ async function loadAudio() {
 	return loadPromise;
 }
 
-export function playKeySound(key: string) {
+export function playKeySound(key: string, delayMs = 0) {
 	const slice = keyMap[key];
 	if (!slice) return;
 
@@ -71,7 +72,7 @@ export function playKeySound(key: string) {
 			gain.gain.value = 0.6;
 
 			source.connect(gain).connect(ac.destination);
-			source.start(0, startMs / 1000, durationMs / 1000);
+			source.start(ac.currentTime + delayMs / 1000, startMs / 1000, durationMs / 1000);
 		})
 		.catch(() => {});
 }

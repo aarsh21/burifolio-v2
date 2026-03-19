@@ -130,14 +130,16 @@
 		if (event.ctrlKey && !event.metaKey && !event.altKey) {
 			if (event.key === 'd') {
 				event.preventDefault();
-				playKeySound('d');
+				playKeySound('ctrl');
+				playKeySound('d', 24);
 				flash('C-d');
 				window.scrollBy({ top: window.innerHeight / 2, behavior: 'smooth' });
 				return;
 			}
 			if (event.key === 'u') {
 				event.preventDefault();
-				playKeySound('u');
+				playKeySound('ctrl');
+				playKeySound('u', 24);
 				flash('C-u');
 				window.scrollBy({ top: -window.innerHeight / 2, behavior: 'smooth' });
 				return;
