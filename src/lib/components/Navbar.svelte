@@ -113,9 +113,9 @@
 			}
 			if (event.key === 'g') {
 				const now = Date.now();
+				playKeySound('g');
 				if (now - lastGPress < 500) {
 					event.preventDefault();
-					playKeySound('g');
 					flash('gg');
 					window.scrollTo({ top: 0, behavior: 'smooth' });
 					lastGPress = 0;
