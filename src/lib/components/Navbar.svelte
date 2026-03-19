@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import { browser } from '$app/environment';
+	import { page } from '$app/state';
 	import { Briefcase, FolderOpen, Home, Notebook, User } from 'lucide-svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { playKeySound } from '$lib/utils/sound';
 
@@ -21,19 +21,27 @@
 	let scrollPercent = $state(0);
 	let lastGPress = $state(0);
 	let pressedKey = $state('');
-	let pressedTimeout: ReturnType<typeof setTimeout>;
-	let showNav = $state(browser ? localStorage.getItem('showNav') === 'true' : false);
+	let pressedTimeout: ReturnType<typeof setTimeout> | undefined;
+	let showNav = $state(false);
 	let showHint = $state(false);
 
-	$effect(() => {
-		if (!browser) return;
+	onMount(() => {
+		showNav = localStorage.getItem('showNav') === 'true';
+		updateScrollPercent();
+
 		if (localStorage.getItem('hintDismissed')) return;
+
 		showHint = true;
-		const t = setTimeout(() => {
+		const hintTimeout = setTimeout(() => {
 			showHint = false;
 			localStorage.setItem('hintDismissed', 'true');
 		}, 6000);
-		return () => clearTimeout(t);
+
+		return () => clearTimeout(hintTimeout);
+	});
+
+	onDestroy(() => {
+		clearTimeout(pressedTimeout);
 	});
 
 	function flash(key: string) {
@@ -46,7 +54,7 @@
 
 	function toggleNav() {
 		showNav = !showNav;
-		if (browser) localStorage.setItem('showNav', String(showNav));
+		localStorage.setItem('showNav', String(showNav));
 	}
 
 	function isActive(href: string) {
@@ -70,6 +78,7 @@
 
 	async function handleKeydown(event: KeyboardEvent) {
 		if (shouldIgnoreShortcut(event)) return;
+		if (event.repeat) return;
 
 		// ? toggles navbar
 		if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
@@ -288,7 +297,7 @@
 		<button
 			onclick={() => {
 				showHint = false;
-				if (browser) localStorage.setItem('hintDismissed', 'true');
+				localStorage.setItem('hintDismissed', 'true');
 			}}
 			class="rounded-lg border border-border/50 bg-card/95 px-4 py-2.5 text-xs text-muted-foreground shadow-lg backdrop-blur-sm transition-opacity hover:opacity-80"
 		>
