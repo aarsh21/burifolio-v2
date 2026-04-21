@@ -1,33 +1,18 @@
-import soundUrl from '../../cherrymx-black-abs/sound.ogg';
+const modules = import.meta.glob<string>('/src/cherrymx-black-abs/slices/*.ogg', {
+	eager: true,
+	query: '?url',
+	import: 'default'
+});
+
+const scanCodeToUrl = new Map<string, string>();
+for (const [path, url] of Object.entries(modules)) {
+	const match = path.match(/\/slices\/(\d+)\.ogg$/);
+	if (match) scanCodeToUrl.set(match[1], url);
+}
 
 let ctx: AudioContext | null = null;
-let audioBuffer: AudioBuffer | null = null;
-let loadPromise: Promise<AudioBuffer> | null = null;
-
-// PC keyboard scan codes → [start_ms, duration_ms] from the CherryMX Black ABS pack
-// Mapped to the actual keys used on the site
-const keyMap: Record<string, [number, number]> = {
-	// Vim scroll
-	j: [34425, 176], // scan 36
-	k: [34932, 180], // scan 37
-
-	// Tab cycling
-	h: [33986, 185], // scan 35
-	l: [35410, 190], // scan 38
-
-	// Jump
-	g: [33453, 188], // scan 34
-	G: [33453, 188], // scan 34 (same physical key)
-
-	// Half-page (Ctrl+d / Ctrl+u — use the letter key sound)
-	ctrl: [45327, 165], // scan 29
-	d: [32492, 169], // scan 32
-	u: [25313, 189], // scan 22
-
-	// Toggle nav
-	'/': [43105, 190], // scan 53
-	'?': [43105, 190] // scan 53 (/ key)
-};
+const buffers = new Map<string, AudioBuffer>();
+const loading = new Map<string, Promise<AudioBuffer>>();
 
 function getCtx() {
 	if (!ctx) ctx = new AudioContext();
@@ -35,35 +20,162 @@ function getCtx() {
 	return ctx;
 }
 
-async function loadAudio() {
-	if (audioBuffer) return audioBuffer;
-
-	if (!loadPromise) {
-		loadPromise = (async () => {
-			const ac = getCtx();
-			const res = await fetch(soundUrl);
-			const buf = await res.arrayBuffer();
-			const decoded = await ac.decodeAudioData(buf);
-			audioBuffer = decoded;
-			return decoded;
-		})();
-
-		loadPromise.catch(() => {
-			loadPromise = null;
-		});
-	}
-
-	return loadPromise;
+async function fetchAndDecode(url: string): Promise<AudioBuffer> {
+	const ac = getCtx();
+	const res = await fetch(url);
+	const arrayBuf = await res.arrayBuffer();
+	return ac.decodeAudioData(arrayBuf);
 }
 
-export function playKeySound(key: string, delayMs = 0) {
-	const slice = keyMap[key];
-	if (!slice) return;
+async function loadByScanCode(scanCode: string): Promise<AudioBuffer | null> {
+	const url = scanCodeToUrl.get(scanCode);
+	if (!url) return null;
 
-	const [startMs, durationMs] = slice;
+	const cached = buffers.get(scanCode);
+	if (cached) return cached;
 
-	void loadAudio()
+	const inFlight = loading.get(scanCode);
+	if (inFlight) return inFlight;
+
+	const promise = fetchAndDecode(url)
+		.then((buf) => {
+			buffers.set(scanCode, buf);
+			loading.delete(scanCode);
+			return buf;
+		})
+		.catch((err) => {
+			loading.delete(scanCode);
+			throw err;
+		});
+
+	loading.set(scanCode, promise);
+	return promise;
+}
+
+const codeToScanCode: Record<string, string> = {
+	Escape: '1',
+	Digit1: '2',
+	Digit2: '3',
+	Digit3: '4',
+	Digit4: '5',
+	Digit5: '6',
+	Digit6: '7',
+	Digit7: '8',
+	Digit8: '9',
+	Digit9: '10',
+	Digit0: '11',
+	Minus: '12',
+	Equal: '13',
+	Backspace: '14',
+	Tab: '15',
+	KeyQ: '16',
+	KeyW: '17',
+	KeyE: '18',
+	KeyR: '19',
+	KeyT: '20',
+	KeyY: '21',
+	KeyU: '22',
+	KeyI: '23',
+	KeyO: '24',
+	KeyP: '25',
+	BracketLeft: '26',
+	BracketRight: '27',
+	Enter: '28',
+	ControlLeft: '29',
+	KeyA: '30',
+	KeyS: '31',
+	KeyD: '32',
+	KeyF: '33',
+	KeyG: '34',
+	KeyH: '35',
+	KeyJ: '36',
+	KeyK: '37',
+	KeyL: '38',
+	Semicolon: '39',
+	Quote: '40',
+	Backquote: '41',
+	ShiftLeft: '42',
+	Backslash: '43',
+	KeyZ: '44',
+	KeyX: '45',
+	KeyC: '46',
+	KeyV: '47',
+	KeyB: '48',
+	KeyN: '49',
+	KeyM: '50',
+	Comma: '51',
+	Period: '52',
+	Slash: '53',
+	ShiftRight: '54',
+	NumpadMultiply: '55',
+	AltLeft: '56',
+	Space: '57',
+	CapsLock: '58',
+	F1: '59',
+	F2: '60',
+	F3: '61',
+	F4: '62',
+	F5: '63',
+	F6: '64',
+	F7: '65',
+	F8: '66',
+	F9: '67',
+	F10: '68',
+	NumLock: '69',
+	ScrollLock: '70',
+	Numpad7: '71',
+	Numpad8: '72',
+	Numpad9: '73',
+	NumpadSubtract: '74',
+	Numpad4: '75',
+	Numpad5: '76',
+	Numpad6: '77',
+	NumpadAdd: '78',
+	Numpad1: '79',
+	Numpad2: '80',
+	Numpad3: '81',
+	Numpad0: '82',
+	NumpadDecimal: '83',
+	F11: '87',
+	F12: '88',
+	ControlRight: '3613',
+	AltRight: '3640'
+};
+
+const keyToScanCode: Record<string, string> = {
+	j: '36',
+	k: '37',
+	h: '35',
+	l: '38',
+	g: '34',
+	G: '34',
+	ctrl: '29',
+	d: '32',
+	u: '22',
+	'/': '53',
+	'?': '53'
+};
+
+let preloaded = false;
+
+export function preloadSound() {
+	if (preloaded) return;
+	preloaded = true;
+
+	// Preload the vim shortcut sounds first
+	const vimScanCodes = new Set(Object.values(keyToScanCode));
+	for (const sc of vimScanCodes) {
+		void loadByScanCode(sc).catch(() => {});
+	}
+}
+
+export function playTypingSound(code: string) {
+	const scanCode = codeToScanCode[code];
+	if (!scanCode) return;
+
+	void loadByScanCode(scanCode)
 		.then((buffer) => {
+			if (!buffer) return;
 			const ac = getCtx();
 			const source = ac.createBufferSource();
 			source.buffer = buffer;
@@ -72,7 +184,27 @@ export function playKeySound(key: string, delayMs = 0) {
 			gain.gain.value = 0.6;
 
 			source.connect(gain).connect(ac.destination);
-			source.start(ac.currentTime + delayMs / 1000, startMs / 1000, durationMs / 1000);
+			source.start(ac.currentTime);
+		})
+		.catch(() => {});
+}
+
+export function playKeySound(key: string, delayMs = 0) {
+	const scanCode = keyToScanCode[key];
+	if (!scanCode) return;
+
+	void loadByScanCode(scanCode)
+		.then((buffer) => {
+			if (!buffer) return;
+			const ac = getCtx();
+			const source = ac.createBufferSource();
+			source.buffer = buffer;
+
+			const gain = ac.createGain();
+			gain.gain.value = 0.6;
+
+			source.connect(gain).connect(ac.destination);
+			source.start(ac.currentTime + delayMs / 1000);
 		})
 		.catch(() => {});
 }
