@@ -18,7 +18,7 @@ export const siteConfig = {
 	linkedin: 'https://www.linkedin.com/in/aarshpadia21/',
 	x: 'https://x.com/buhhfps',
 	twitch: 'https://twitch.tv/buhhfps',
-	youtube: 'https://www.youtube.com/bukubukufps',
+	youtube: 'https://www.youtube.com/@aaisuuuu',
 	meeting: 'https://cal.com/aarsh.hyorinmaru.me/30min?overlayCalendar=true',
 	resume: 'https://drive.google.com/uc?export=download&id=11OOFNEjwML-2tdqofzNmMlmquTaYNOaY'
 } as const;
@@ -33,8 +33,7 @@ export const socialLinks: SocialLink[] = [
 	{ title: 'x', href: siteConfig.x },
 	{ title: 'meeting', href: siteConfig.meeting },
 	{ title: 'twitch', href: siteConfig.twitch },
-	{ title: 'youtube', href: siteConfig.youtube },
-	{ title: 'resume', href: siteConfig.resume }
+	{ title: 'youtube', href: siteConfig.youtube }
 ];
 
 export const aboutContent = {

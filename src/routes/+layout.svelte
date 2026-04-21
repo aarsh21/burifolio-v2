@@ -20,7 +20,7 @@
 	<meta content="summary_large_image" name="twitter:card" />
 	<meta content={siteConfig.name} name="twitter:title" />
 	<meta content={siteConfig.description} name="twitter:description" />
-	<meta content="@bukubukutech" name="twitter:creator" />
+	<meta content="@buhhfps" name="twitter:creator" />
 	<link href="/favicon.ico" rel="icon" />
 	<link href="/profile.jpg" rel="apple-touch-icon" />
 	<script
