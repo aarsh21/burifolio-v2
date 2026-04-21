@@ -21,7 +21,7 @@
 	<meta content={siteConfig.name} name="twitter:title" />
 	<meta content={siteConfig.description} name="twitter:description" />
 	<meta content="@bukubukutech" name="twitter:creator" />
-	<link href="/profile.jpg" rel="icon" />
+	<link href="/favicon.ico" rel="icon" />
 	<link href="/profile.jpg" rel="apple-touch-icon" />
 	<script
 		defer
