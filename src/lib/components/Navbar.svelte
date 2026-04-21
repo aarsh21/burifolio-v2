@@ -4,7 +4,7 @@
 	import { Briefcase, FolderOpen, Home, Notebook, User } from 'lucide-svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
-	import { playKeySound } from '$lib/utils/sound';
+	import { playKeySound, preloadSound } from '$lib/utils/sound';
 
 	const navItems = [
 		{ href: '/', label: 'home', icon: Home },
@@ -29,6 +29,11 @@
 		showNav = localStorage.getItem('showNav') === 'true';
 		updateScrollPercent();
 
+		const preloadOnce = () => preloadSound();
+		document.addEventListener('keydown', preloadOnce, { once: true });
+		document.addEventListener('click', preloadOnce, { once: true });
+		document.addEventListener('touchstart', preloadOnce, { once: true });
+
 		if (localStorage.getItem('hintDismissed')) return;
 
 		showHint = true;
@@ -37,7 +42,12 @@
 			localStorage.setItem('hintDismissed', 'true');
 		}, 6000);
 
-		return () => clearTimeout(hintTimeout);
+		return () => {
+			clearTimeout(hintTimeout);
+			document.removeEventListener('keydown', preloadOnce);
+			document.removeEventListener('click', preloadOnce);
+			document.removeEventListener('touchstart', preloadOnce);
+		};
 	});
 
 	onDestroy(() => {
