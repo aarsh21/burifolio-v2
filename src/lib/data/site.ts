@@ -13,7 +13,7 @@ export const siteConfig = {
 	location: 'Rajkot, Gujarat, India',
 	email: 'aarshpersonal@proton.me',
 	currentRole: 'MLOps & AI engineer at Senpiper Technologies',
-	avatar: '/profile.png',
+	avatar: '/profile.jpg',
 	github: 'https://github.com/aarsh21',
 	linkedin: 'https://www.linkedin.com/in/aarshpadia21/',
 	x: 'https://x.com/buhhfps',

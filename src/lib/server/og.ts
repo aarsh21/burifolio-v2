@@ -37,7 +37,9 @@ async function getAvatarBase64(): Promise<string> {
 
 	const avatarPath = path.join(process.cwd(), 'static', siteConfig.avatar.replace(/^\//, ''));
 	const avatarBuffer = await fs.readFile(avatarPath);
-	avatarCache = `data:image/png;base64,${avatarBuffer.toString('base64')}`;
+	const ext = path.extname(avatarPath).slice(1);
+	const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`;
+	avatarCache = `data:${mime};base64,${avatarBuffer.toString('base64')}`;
 	return avatarCache;
 }
 
