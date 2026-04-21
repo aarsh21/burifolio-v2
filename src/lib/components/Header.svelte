@@ -7,11 +7,15 @@
 <header class="mb-16 space-y-4">
 	<div class="flex flex-col gap-6 sm:flex-row sm:items-center">
 		<div class="relative h-24 w-24 overflow-hidden rounded-full border border-gray-800 bg-gray-900">
-			<img
-				alt={siteConfig.name}
-				class="absolute inset-0 h-full w-full object-cover"
-				src={siteConfig.avatar}
-			/>
+			<picture>
+				<source srcset="/profile.avif" type="image/avif" />
+				<source srcset="/profile.webp" type="image/webp" />
+				<img
+					alt={siteConfig.name}
+					class="absolute inset-0 h-full w-full object-cover"
+					src={siteConfig.avatar}
+				/>
+			</picture>
 		</div>
 
 		<div class="space-y-4">

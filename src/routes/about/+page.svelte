@@ -20,13 +20,17 @@
 			<div
 				class="relative h-28 w-28 overflow-hidden rounded-full border border-gray-800 bg-gray-900"
 			>
-				<img
-					alt={siteConfig.name}
-					class="h-full w-full object-cover"
-					height="112"
-					src={siteConfig.avatar}
-					width="112"
-				/>
+				<picture>
+					<source srcset="/profile.avif" type="image/avif" />
+					<source srcset="/profile.webp" type="image/webp" />
+					<img
+						alt={siteConfig.name}
+						class="h-full w-full object-cover"
+						height="112"
+						src={siteConfig.avatar}
+						width="112"
+					/>
+				</picture>
 			</div>
 
 			<div class="space-y-3">
