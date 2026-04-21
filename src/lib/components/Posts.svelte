@@ -3,7 +3,7 @@
 	import { tick } from 'svelte';
 
 	import type { BlogPostSummary } from '$lib/types/content';
-	import { playKeySound } from '$lib/utils/sound';
+	import { playKeySound, playTypingSound } from '$lib/utils/sound';
 
 	import PostItem from './PostItem.svelte';
 
@@ -118,6 +118,20 @@
 		searchQuery = (event.currentTarget as HTMLInputElement).value;
 		selectedIndex = 0;
 	}
+
+	function handleSearchKeydown(event: KeyboardEvent) {
+		// Skip navigation/meta keys — only play for actual character input
+		if (
+			event.ctrlKey ||
+			event.metaKey ||
+			event.altKey ||
+			event.key.length > 1 ||
+			event.repeat
+		) {
+			return;
+		}
+		playTypingSound(event.code);
+	}
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -137,6 +151,7 @@
 				aria-label="Search posts"
 				class="flex-1 bg-transparent outline-none"
 				oninput={handleSearchInput}
+				onkeydown={handleSearchKeydown}
 				placeholder="search posts..."
 				role="combobox"
 				type="text"
